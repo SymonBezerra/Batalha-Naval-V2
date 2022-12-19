@@ -1,11 +1,20 @@
 import pygame
 from ship import Ship
-screen = pygame.display.set_mode([800, 600])
+from board import Board
+game_screen = pygame.display.set_mode([800, 600])
 # clock = pygame.time.Clock()
 
+def board_blit(board: Board, screen: pygame.Surface, init_pos = (400, 300)):
+    for ship_line in board.player_fleet:
+        for ship_entity in ship_line:
+            screen.blit(ship_entity,
+            (init_pos[0] + 20 + (20 * ship_entity.coordinate[0]),
+            init_pos[1] + 20 + (20 * ship_entity.coordinate[1])))
+    
 
 # game objects 
-ship = Ship("R")
+# ship = Ship("R")
+board = Board(10)
 if __name__ == "__main__":
     pygame.init()
 
@@ -16,9 +25,9 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 running = False
         
-        screen.fill((0, 0, 128))
+        game_screen.fill((8, 143, 143))
 
-        screen.blit(ship.surface, (400,300))
+        board_blit(board, game_screen)
 
         pygame.display.flip()
     
