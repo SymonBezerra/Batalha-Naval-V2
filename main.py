@@ -1,7 +1,11 @@
 import pygame
-screen = pygame.display.set_mode([1080, 720])
+from ship import Ship
+screen = pygame.display.set_mode([800, 600])
 # clock = pygame.time.Clock()
 
+
+# game objects 
+ship = Ship("R")
 if __name__ == "__main__":
     pygame.init()
 
@@ -12,9 +16,9 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 running = False
         
-        screen.fill((255,255,255))
+        screen.fill((0, 0, 128))
 
-        pygame.draw.circle(screen, (0,0,0), (250, 250), 50)
+        screen.blit(ship.surface, (400,300))
 
         pygame.display.flip()
     
