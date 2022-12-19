@@ -13,8 +13,5 @@ class Board:
 
     def __board_test (self, fleet: pygame.sprite.Group):
         for i in range(self.size):
-            ship_line = pygame.sprite.Group()
             for j in range (self.size):
-                ship_line.add(Ship("N", (i,j)))
-        
-        fleet.add(ship_line)
+                fleet.add(Ship("N", (i,j)))
