@@ -27,4 +27,4 @@ class Ship(pygame.sprite.Sprite):
         elif self.show_collision_block and self.tag == "O":
             self.image = pygame.image.load("sprites/collision_block_square.png").convert()
         
-        # self.image = pygame.transform.scale(self.image, (35, 35))
+        self.image = pygame.transform.scale(self.image, (35, 35))

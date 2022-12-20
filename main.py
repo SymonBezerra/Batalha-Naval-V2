@@ -6,15 +6,15 @@ from board import Board
 
 BOARD_SIZE = 10 
 game_screen = pygame.display.set_mode([1080, 720])
-# clock = pygame.time.Clock()
+clock = pygame.time.Clock()
 
 # game loop functions 
-def board_blit(board: Board, screen: pygame.Surface):
+def board_blit(board: Board, screen: pygame.Surface, move: int):
     # for printing the board
     ship_entity: Ship
     for ship_entity in board.fleet_sprites:
-        ship_pos = (board.init_pos[0] + (40 * ship_entity.coordinate[0]),
-        board.init_pos[1] + (40 * ship_entity.coordinate[1]))
+        ship_pos = (board.init_pos[0] + (40 * ship_entity.coordinate[0]) + move,
+        board.init_pos[1] + (40 * ship_entity.coordinate[1]) + move)
         ship_entity.update_sprite()
         screen.blit(ship_entity.image, ship_pos)
 
@@ -53,6 +53,8 @@ if __name__ == "__main__":
         pygame.draw.rect(game_screen, (0, 0, 0), (540, 0, 20, 720))
         board_blit(game_player.board, game_screen)
         board_blit(game_cpu.board, game_screen)
-        pygame.display.update()
+        pygame.display.flip()
+
+        clock.tick(60)
     
     pygame.quit()
