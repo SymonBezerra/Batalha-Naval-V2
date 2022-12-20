@@ -18,7 +18,7 @@ def board_blit(board: Board, screen: pygame.Surface):
         ship_entity.update_sprite()
         ship_entity.rect = ship_entity.image.get_rect(center=ship_pos)
         screen.blit(ship_entity.image, ship_entity.rect)
-        pygame.display.update(ship_entity.rect)
+        pygame.display.flip()
 
 def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: int) -> None:
     # set ship on place
@@ -31,7 +31,6 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
 
             # debug
             ship.hit = True
-
 
 
 # game objects 
