@@ -2,8 +2,8 @@ from fleet import Fleet
 from board import Board
 from ship import Ship
 class Player:
-    def __init__ (self, size: int):
-        self.name = "Player"
+    def __init__ (self, size: int, name: str):
+        self.name = name
         self.size = size
         self.board = Board(self.size, self.name)
         # self.fleet = Fleet(self.size)

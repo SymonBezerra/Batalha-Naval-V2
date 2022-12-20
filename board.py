@@ -13,7 +13,7 @@ class Board:
         # self.__board_test(self.fleet)
 
         self.init_pos = (0,0)
-        if player_name == "player": 
+        if player_name == "Player": 
             self.init_pos = (50, 160)
         else: 
             self.init_pos = (630, 160)
