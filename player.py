@@ -10,8 +10,12 @@ class Player:
 
     def initialize_game(self):
         for i in range(self.size):
-            fleet_line = []
+            fleet_coords_line = []
+            fleet_sprites_line = []
             for j in range(self.size):
                 ship = Ship("N", (i,j))
-                fleet_line.append((i,j))
-            self.fleet.ships.append(fleet_line)
+                self.board.fleet_sprites.add(ship)
+                fleet_coords_line.append((i,j))
+                fleet_sprites_line.append(ship)
+            self.fleet.ships.append(fleet_coords_line)
+            self.board.fleet_coordinates.append(fleet_sprites_line)

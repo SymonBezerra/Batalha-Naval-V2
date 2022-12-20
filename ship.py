@@ -4,10 +4,10 @@ SHIP_TAGS = {"R": "Carrier", "B": "Battleship",
             "C": "Cruiser", "D": "Destroyer", "N": "Miss", "O": "Miss"}
 SHIP_SIZES = {"R": 5, "B": 4, "C": 3, "D": 2, "N": 0, "O": 0}
 class Ship(pygame.sprite.Sprite):
-    def __init__(self, type: str, coordinate: tuple):
+    def __init__(self, tag: str, coordinate: tuple):
         super(Ship, self).__init__()
-        self.tag = SHIP_TAGS[type]
-        self.size = SHIP_SIZES[type]
+        self.tag = tag
+        self.name = SHIP_TAGS[tag] 
         self.coordinate = coordinate
 
         self.hit = False
