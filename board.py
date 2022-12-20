@@ -4,12 +4,15 @@ from ship import Ship
 import pygame
 class Board:
     # def __init__ (self, size: int, player: Player, cpu: CPU):
-    def __init__ (self, size: int):
+    def __init__ (self, size: int, player: str):
         self.size = size
-        self.player_fleet = pygame.sprite.Group()
-        self.cpu_fleet = pygame.sprite.Group()
+        self.fleet = pygame.sprite.Group()
         # these will work as the previous version's memories
-        self.__board_test(self.player_fleet)
+        self.__board_test(self.fleet)
+
+        self.init_pos = (0,0)
+        if player == "player": self.init_pos = (50, 160)
+        else: self.init_pos = (630, 160)
 
     def __board_test (self, fleet: pygame.sprite.Group):
         for i in range(self.size):
