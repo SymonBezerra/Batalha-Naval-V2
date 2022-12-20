@@ -31,7 +31,7 @@ class Board:
 
     def check_avaliable_placement (self, init_coordinate: tuple, ship_tag: str,
                                     direction: int) -> bool:
-        # 0 = up, 1 = down, 2 = left, 3 = right
+        # 0 =left, 1 = right, 2 = up, 3 = down
         coordinates = self.adjacent_coordinates(init_coordinate, ship_tag, direction)
         if direction == 0:
             if init_coordinate[0] - SHIP_SIZES[ship_tag] < 0:

@@ -13,11 +13,10 @@ def board_blit(board: Board, screen: pygame.Surface):
     # for printing the board
     ship_entity: Ship
     for ship_entity in board.fleet_sprites:
+        ship_pos = (board.init_pos[0] + (40 * ship_entity.coordinate[0]),
+        board.init_pos[1] + (40 * ship_entity.coordinate[1]))
         ship_entity.update_sprite()
-        screen.blit(ship_entity.image,
-        (board.init_pos[0] + (40 * ship_entity.coordinate[0]),
-        board.init_pos[1] + (40 * ship_entity.coordinate[1])),
-        ship_entity.rect)
+        screen.blit(ship_entity.image, ship_pos)
 
 def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: int) -> None:
     # set ship on place
@@ -26,7 +25,7 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
         ship_coordinates = board.adjacent_coordinates(init_coordinate, ship_tag, direction)
         for coordinate in ship_coordinates:
             ship: Ship = board.fleet_objects[coordinate[0]][coordinate[1]]
-            ship.tag = "M"
+            ship.tag = ship_tag
 
             # debug
             ship.hit = True
@@ -38,7 +37,7 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
 game_player = Player(BOARD_SIZE)
 game_cpu = CPU(BOARD_SIZE)
 
-place_ship(game_player.board, "C", (0,0), 1)
+place_ship(game_player.board, "C", (5,5), 2)
 
 if __name__ == "__main__":
     pygame.init()
