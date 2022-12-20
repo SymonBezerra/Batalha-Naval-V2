@@ -11,7 +11,7 @@ def board_blit(board: Board, screen: pygame.Surface, placement: str):
     if placement == "player":
         init_pos = (50, 160)
     for ship_entity in board.player_fleet:
-            screen.blit(ship_entity.surface,
+            screen.blit(ship_entity.image,
             (init_pos[0] + (40 * ship_entity.coordinate[0]),
             init_pos[1] + (40 * ship_entity.coordinate[1])))
     
@@ -30,8 +30,12 @@ if __name__ == "__main__":
                 running = False
         
         game_screen.fill((8, 143, 143))
-
+        
+        # black line in the middle of the screen
+        pygame.draw.rect(game_screen, (0, 0, 0), (540, 0, 20, 720))
+        
         board_blit(board, game_screen, "cpu")
+        board_blit(board, game_screen, "player")
 
         pygame.display.flip()
     

@@ -11,17 +11,16 @@ class Ship(pygame.sprite.Sprite):
         self.coordinate = coordinate
 
         self.hit = False
-        self.color = (0, 0, 139)
-
-        @property
-        def color (self) -> tuple:
-            if not self.hit:
-                return (255,255,255)
-            elif self.hit and self.tag == "N":
-                return (0,0,139)
-            else:
-                return (255,69,0)
+        self.color = (255, 255, 255) # default white
         
-        self.surface = pygame.Surface((20,20))
+        def update_color (self) -> tuple:
+            if self.hit and self.tag == "N":
+                self.color (0, 0, 139)
+            else:
+                self.color (255, 69, 0)
+        
+        self.surface = pygame.Surface((20, 20))
         self.surface.fill(self.color) # white as placeholder
         self.rect = self.surface.get_rect()
+        self.image = pygame.image.load("sprites/miss_square.png")
+        self.image = pygame.transform.scale(self.image, (35, 35))
