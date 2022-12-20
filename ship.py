@@ -13,9 +13,9 @@ class Ship(pygame.sprite.Sprite):
         self.hit = False
         self.show_collision_block = False
 
-        self.surface = pygame.Surface((20,20))
-        self.rect = self.surface.get_rect()
+        # self.surface = pygame.Surface((20,20))
         self.image = pygame.image.load("sprites/closed_square.png").convert()
+        self.rect = self.image.get_rect()
         self.image = pygame.transform.scale(self.image, (35, 35))
         
     def update_sprite (self) -> None:
