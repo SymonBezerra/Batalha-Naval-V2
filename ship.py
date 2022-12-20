@@ -17,22 +17,17 @@ class Ship(pygame.sprite.Sprite):
         self.surface = pygame.Surface((20, 20))
         self.surface.fill(self.color) # white as placeholder
         self.rect = self.surface.get_rect()
-        self.image = self.update()
+        self.image = pygame.image.load("sprites/closed_square.png")
         self.image = pygame.transform.scale(self.image, (35, 35))
         
     def update (self) -> pygame.image:
-        # status: Fleet tag
-        if not self.hit:
-            image = pygame.image.load("sprites/closed_square.png")
-            image = pygame.transform.scale(image, (35, 35))
-        elif self.hit and self.tag in ("N", "O"):
-            image = pygame.image.load("sprites/miss_square.png")
-            image = pygame.transform.scale(image, (35, 35))
+
+        if self.hit and self.tag in ("N", "O"):
+            pygame.image.load("sprites/miss_square.png")
+        elif self.hit and self.tag in ("R", "C", "B", "D"):
+            new_image = pygame.image.load("sprites/hit_square.png")
         elif self.show_collision_block and self.tag == "O":
-            image = pygame.image.load("sprites/collision_block_square.png")
-            image = pygame.transform.scale(image, (35, 35))
-        elif self.hit and self.tag == "H":
-            image = pygame.image.load("sprites/hit_square.png")
-            image = pygame.transform.scale(image, (35, 35))
-        
-        return image
+            new_image = pygame.image.load("sprites/collision_block_square.png")
+            
+            
+        return new_image

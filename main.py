@@ -1,20 +1,43 @@
 import pygame
-from ship import Ship
+from player import Player
+from cpu import CPU
 from board import Board
+
+BOARD_SIZE = 10 
 game_screen = pygame.display.set_mode([1080, 720])
 # clock = pygame.time.Clock()
 
+# game loop functions 
 def board_blit(board: Board, screen: pygame.Surface):
-    for ship_entity in board.fleet:
+    # for printing the board
+    for ship_entity in board.fleet_sprites:
             screen.blit(ship_entity.image,
             (board.init_pos[0] + (40 * ship_entity.coordinate[0]),
             board.init_pos[1] + (40 * ship_entity.coordinate[1])))
-    
+
+def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: int) -> None:
+    # set ship on place
+    valid_placement = board.check_avaliable_placement(init_coordinate, ship_tag, direction)
+    if valid_placement:
+        ship_coordinates = board.adjacent_coordinates(init_coordinate, ship_tag, direction)
+        for coordinate in ship_coordinates:
+            ship = board.fleet_objects[coordinate[0]][coordinate[1]]
+            ship.tag = ship_tag
+            
+            # debug
+            ship.hit = True
+
+            ship.update()
+
+
 
 # game objects 
-# ship = Ship("R")
-player_board = Board(10, "player")
-cpu_board = Board(10, "cpu")
+
+game_player = Player(BOARD_SIZE)
+game_cpu = CPU(BOARD_SIZE)
+
+place_ship(game_player.board, "C", (0,0), 1)
+
 if __name__ == "__main__":
     pygame.init()
 
@@ -30,8 +53,8 @@ if __name__ == "__main__":
         # black line in the middle of the screen
         pygame.draw.rect(game_screen, (0, 0, 0), (540, 0, 20, 720))
         
-        board_blit(player_board, game_screen)
-        board_blit(cpu_board, game_screen)
+        board_blit(game_player.board, game_screen)
+        board_blit(game_cpu.board, game_screen)
 
         pygame.display.flip()
     

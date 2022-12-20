@@ -6,16 +6,15 @@ class Player:
         self.name = "Player"
         self.size = size
         self.board = Board(self.size, self.name)
-        self.fleet = Fleet(self.size)
+        # self.fleet = Fleet(self.size)
+        self.__initialize_game()
 
-    def initialize_game(self):
+    def __initialize_game(self):
         for i in range(self.size):
-            fleet_coords_line = []
-            fleet_sprites_line = []
+            fleet_objects = []
             for j in range(self.size):
                 ship = Ship("N", (i,j))
+                fleet_objects.append(ship)
                 self.board.fleet_sprites.add(ship)
-                fleet_coords_line.append((i,j))
-                fleet_sprites_line.append(ship)
-            self.fleet.ships.append(fleet_coords_line)
-            self.board.fleet_coordinates.append(fleet_sprites_line)
+
+            self.board.fleet_objects.append(fleet_objects)
