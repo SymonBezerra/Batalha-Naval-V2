@@ -50,8 +50,8 @@ if __name__ == "__main__":
     GAME_FONT = pygame.font.Font("gfx/Cascadia.ttf", 25)
 
     running = True
-    player_turn = False
-    placing_ships = True
+    player_turn = True
+    placing_ships = False
 
     
     while running:
@@ -65,6 +65,8 @@ if __name__ == "__main__":
                                     in game_cpu.board.fleet_sprites
                                     if entity.rect.collidepoint(pos)]:
                         ship_entity.set_hit()
+                        game_player.board.last_hit_coord = ship_entity.coordinate
+                        game_player.board.last_hit_tag = ship_entity.tag
                         # print("HIT")
             
             elif event.type == KEYDOWN:

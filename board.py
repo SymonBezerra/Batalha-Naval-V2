@@ -41,7 +41,7 @@ class Board:
         if self.last_hit_coord == (10,10):
             coordinate = f"--"
         else:
-            coordinate = f"{TOP_COORDINATES[self.last_hit_coord[0]]}{self.last_hit_coord[1]}"
+            coordinate = f"{TOP_COORDINATES[self.last_hit_coord[0]]}{self.last_hit_coord[1] + 1}"
         
         return f"{self.player_name} Last shot: {coordinate}, {tag}"
 
