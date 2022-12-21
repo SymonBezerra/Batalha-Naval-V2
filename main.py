@@ -1,4 +1,5 @@
 import pygame
+from pygame.locals import MOUSEBUTTONDOWN
 from ship import Ship
 from player import Player
 from cpu import CPU
@@ -37,9 +38,6 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
 game_player = Player(BOARD_SIZE, "Player")
 game_cpu = CPU(BOARD_SIZE, "CPU")
 
-place_ship(game_player.board, "C", (5,5), 2)
-place_ship(game_cpu.board, "C", (5,5), 2)
-
 
 if __name__ == "__main__":
     pygame.init()
@@ -50,6 +48,15 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            elif event.type == MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()
+                ship_entity: Ship
+                for ship_entity in [entity for entity
+                                    in game_cpu.board.fleet_sprites
+                                    if entity.rect.collidepoint(pos)]:
+                        ship_entity.hit = True
+                        # print("HIT")
+                        ship_entity.update_sprite()
          
         game_screen.fill((8, 143, 143))
         pygame.draw.rect(game_screen, (0, 0, 0), (540, 0, 20, 720))
