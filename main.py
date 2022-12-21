@@ -50,8 +50,8 @@ if __name__ == "__main__":
     GAME_FONT = pygame.font.Font("gfx/Cascadia.ttf", 25)
 
     running = True
-    player_turn = True
-    placing_ships = False
+    player_turn = False
+    placing_ships = True
 
     
     while running:
