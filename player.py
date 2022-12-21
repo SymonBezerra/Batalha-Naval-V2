@@ -1,4 +1,3 @@
-from fleet import Fleet
 from board import Board
 from ship import Ship
 class Player:
