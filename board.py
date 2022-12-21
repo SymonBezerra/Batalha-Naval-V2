@@ -1,8 +1,12 @@
 from ship import Ship, SHIP_SIZES, SHIP_TAGS
 import pygame
+
+TOP_COORDINATES = {0: "A", 1: "B", 2: "C", 3: "D", 4: "E",
+                    5: "F", 6: "G", 7: "H", 8: "I", 9: "J"}
 class Board:
 
     def __init__ (self, size: int, player_name: str):
+        self.player_name = player_name
         self.size = size
         self.fleet_sprites = pygame.sprite.Group()
         # for drawing
@@ -33,7 +37,13 @@ class Board:
         else:
             tag = SHIP_TAGS[self.last_hit_tag]
         
-        coordinate: tuple
+        coordinate: str
+        if self.last_hit_coord == (10,10):
+            coordinate = f"--"
+        else:
+            coordinate = f"{TOP_COORDINATES[self.last_hit_coord[0]]}{self.last_hit_coord[1]}"
+        
+        return f"{self.player_name} Last shot: {coordinate}, {tag}"
 
     def set_ships_tag(self, coordinates: list, tag: str) -> None:
         for coordinate in coordinates:
