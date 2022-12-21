@@ -41,7 +41,7 @@ if __name__ == "__main__":
     pygame.init()
 
     running = True
-    player_turn = False 
+    player_turn = False
     placing_ships = True
 
     

@@ -33,7 +33,7 @@ class Board:
     def rotate (self) -> None:
         if self.rotation < 3: self.rotation += 1
         else: self.rotation = 0
-        print(self.rotation)
+        # print(self.rotation)
 
     def check_avaliable_placement (self, init_coordinate: tuple, ship_tag: str,
                                     direction: int) -> bool:
