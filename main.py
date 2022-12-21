@@ -1,5 +1,5 @@
 import pygame
-from pygame.locals import MOUSEBUTTONDOWN
+from pygame.locals import MOUSEBUTTONDOWN, K_SPACE, KEYDOWN
 from ship import Ship
 from player import Player
 from cpu import CPU
@@ -29,8 +29,7 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
             ship: Ship = board.fleet_objects[coordinate[0]][coordinate[1]]
             ship.tag = ship_tag
 
-            # debug
-            ship.hit = True
+            ship.hit = True # debug
 
 
 # game objects 
@@ -38,12 +37,13 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
 game_player = Player(BOARD_SIZE, "Player")
 game_cpu = CPU(BOARD_SIZE, "CPU")
 
-
 if __name__ == "__main__":
     pygame.init()
 
     running = True
     player_turn = False 
+    placing_ships = True
+
     
     while running:
         for event in pygame.event.get():
@@ -57,7 +57,20 @@ if __name__ == "__main__":
                                     if entity.rect.collidepoint(pos)]:
                         ship_entity.set_hit()
                         # print("HIT")
-                        
+            
+            elif event.type == KEYDOWN:
+                if event.key == K_SPACE:
+                    game_player.board.rotate()
+            
+            elif event.type == MOUSEBUTTONDOWN and placing_ships:
+                pos = pygame.mouse.get_pos()
+                for ship_entity in [entity for entity
+                                    in game_player.board.fleet_sprites
+                                    if entity.rect.collidepoint(pos)]:
+                    place_ship(game_player.board, "C", 
+                    ship_entity.coordinate,
+                    game_player.board.rotation)
+                    ship_entity.update_sprite()
          
         game_screen.fill((8, 143, 143))
         pygame.draw.rect(game_screen, (0, 0, 0), (540, 0, 20, 720))

@@ -7,6 +7,7 @@ class Board:
         self.fleet_sprites = pygame.sprite.Group()
         # for drawing
         self.fleet_objects = []
+        self.rotation = 0
         # for Ship.setTag()
         # these will work as the previous version's memories
         
@@ -25,49 +26,58 @@ class Board:
 
     def set_ships_tag(self, coordinates: list, tag: str) -> None:
         for coordinate in coordinates:
-            ship = self.fleet_objects[coordinate[0]][coordinate[1]]
+            ship: Ship = self.fleet_objects[coordinate[0]][coordinate[1]]
             ship.tag = tag
             ship.update()
+    
+    def rotate (self) -> None:
+        if self.rotation < 3: self.rotation += 1
+        else: self.rotation = 0
+        print(self.rotation)
 
     def check_avaliable_placement (self, init_coordinate: tuple, ship_tag: str,
                                     direction: int) -> bool:
         # 0 =left, 1 = right, 2 = up, 3 = down
         coordinates = self.adjacent_coordinates(init_coordinate, ship_tag, direction)
         if direction == 0:
-            if init_coordinate[0] - SHIP_SIZES[ship_tag] < 0:
+            if init_coordinate[0] + 1 - SHIP_SIZES[ship_tag] < 0:
                 return False
             else:
                 for coordinate in coordinates:
+                    ship: Ship
                     ship = self.fleet_objects[coordinate[0]][coordinate[1]]
                     if ship.tag != "N":
                         return False
             return True
         
         elif direction == 1:
-            if init_coordinate[0] + SHIP_SIZES[ship_tag] > self.size:
+            if init_coordinate[0] + 1 + SHIP_SIZES[ship_tag] > self.size + 1:
                 return False
             else:
                 for coordinate in coordinates:
+                    ship: Ship
                     ship = self.fleet_objects[coordinate[0]][coordinate[1]]
                     if ship.tag != "N":
                         return False
             return True
         
         elif direction == 2:
-            if init_coordinate[1] - SHIP_SIZES[ship_tag] < 0:
+            if init_coordinate[1] + 1 - SHIP_SIZES[ship_tag] < 0:
                 return False
             else:
                 for coordinate in coordinates:
+                    ship: Ship
                     ship = self.fleet_objects[coordinate[0]][coordinate[1]]
                     if ship.tag != "N":
                         return False
             return True
         
         elif direction == 3:
-            if init_coordinate[1] + SHIP_SIZES[ship_tag] > self.size:
+            if init_coordinate[1] + 1 + SHIP_SIZES[ship_tag] > self.size + 1:
                 return False
             else:
                 for coordinate in coordinates:
+                    ship: Ship
                     ship = self.fleet_objects[coordinate[0]][coordinate[1]]
                     if ship.tag != "N":
                         return False
