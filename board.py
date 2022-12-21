@@ -1,4 +1,4 @@
-from ship import Ship, SHIP_SIZES
+from ship import Ship, SHIP_SIZES, SHIP_TAGS
 import pygame
 class Board:
 
@@ -7,22 +7,33 @@ class Board:
         self.fleet_sprites = pygame.sprite.Group()
         # for drawing
         self.fleet_objects = []
+        # for hits
         self.rotation = 0
-        # for Ship.setTag()
-        # these will work as the previous version's memories
-        
-        # self.__board_test(self.fleet)
+
+        # for player\CPU stats
+        self.last_hit_tag = "-"
+        self.last_hit_coord = (10,10)
 
         self.init_pos = (0,0)
         if player_name == "Player": 
-            self.init_pos = (50, 160)
+            self.init_pos = (100, 200)
         else: 
-            self.init_pos = (630, 160)
+            self.init_pos = (630, 200)
 
     # def __board_test (self, fleet: pygame.sprite.Group):
     #     for i in range(self.size):
     #         for j in range (self.size):
     #             fleet.add(Ship("N", (i,j)))
+
+    @property
+    def stats (self) -> str:
+        tag: str
+        if self.last_hit_tag == "-":
+            tag = self.last_hit_tag
+        else:
+            tag = SHIP_TAGS[self.last_hit_tag]
+        
+        coordinate: tuple
 
     def set_ships_tag(self, coordinates: list, tag: str) -> None:
         for coordinate in coordinates:
