@@ -1,0 +1,10 @@
+# mouse input X
+# auto board fill 
+# manual board (player) fill
+    # mouse visual effect if board placement is avaliable
+
+# game loop
+    # cpu randomshot
+# title screen
+# cpu AI
+# sound effects

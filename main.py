@@ -7,6 +7,8 @@ from board import Board
 
 BOARD_SIZE = 10 
 game_screen = pygame.display.set_mode([1080, 720])
+BACKGROUND = pygame.image.load("sprites/background.png").convert()
+# not used for this version
 clock = pygame.time.Clock()
 
 # game loop functions 
@@ -72,7 +74,7 @@ if __name__ == "__main__":
                     game_player.board.rotation)
                     ship_entity.update_sprite()
          
-        game_screen.fill((8, 143, 143))
+        game_screen.blit(BACKGROUND, (0,0))
         pygame.draw.rect(game_screen, (0, 0, 0), (540, 0, 20, 720))
         board_blit(game_player.board, game_screen)
         board_blit(game_cpu.board, game_screen)
