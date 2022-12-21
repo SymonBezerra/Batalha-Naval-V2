@@ -17,9 +17,13 @@ class Ship(pygame.sprite.Sprite):
         self.image = pygame.image.load("sprites/closed_square.png").convert()
         self.rect = self.image.get_rect()
         self.image = pygame.transform.scale(self.image, (35, 35))
+
+    def set_hit (self) -> None:
+        self.hit = True
+        self.update_sprite()
         
     def update_sprite (self) -> pygame.image:
-        if self.hit and self.tag in ("M", "O"):
+        if self.hit and self.tag in ("N", "O"):
             self.image = pygame.image.load("sprites/miss_square.png").convert()
         elif self.hit and self.tag in ("R", "C", "B", "D"):
             self.image = pygame.image.load("sprites/hit_square.png").convert()

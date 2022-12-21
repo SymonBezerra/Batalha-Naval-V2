@@ -43,20 +43,21 @@ if __name__ == "__main__":
     pygame.init()
 
     running = True
-
+    player_turn = False 
+    
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == MOUSEBUTTONDOWN:
+            elif event.type == MOUSEBUTTONDOWN and player_turn:
                 pos = pygame.mouse.get_pos()
                 ship_entity: Ship
                 for ship_entity in [entity for entity
                                     in game_cpu.board.fleet_sprites
                                     if entity.rect.collidepoint(pos)]:
-                        ship_entity.hit = True
+                        ship_entity.set_hit()
                         # print("HIT")
-                        ship_entity.update_sprite()
+                        
          
         game_screen.fill((8, 143, 143))
         pygame.draw.rect(game_screen, (0, 0, 0), (540, 0, 20, 720))
