@@ -6,7 +6,6 @@ class Player:
         self.name = name
         self.size = size
         self.board = Board(self.size, self.name)
-        # self.fleet = Fleet(self.size)
         self.__initialize_game()
 
     def __initialize_game(self):
