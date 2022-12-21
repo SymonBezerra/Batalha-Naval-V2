@@ -5,9 +5,10 @@ from player import Player
 from cpu import CPU
 from board import Board
 
-BOARD_SIZE = 10 
+BOARD_SIZE = 10
 game_screen = pygame.display.set_mode([1080, 720])
-BACKGROUND = pygame.image.load("sprites/background.png").convert()
+pygame.display.set_caption("Batalha Naval")
+BACKGROUND = pygame.image.load("gfx/background.png").convert()
 # not used for this version
 clock = pygame.time.Clock()
 
@@ -31,7 +32,7 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
             ship: Ship = board.fleet_objects[coordinate[0]][coordinate[1]]
             ship.tag = ship_tag
 
-            ship.hit = True # debug
+            # ship.hit = True # debug
 
 
 # game objects 
@@ -41,6 +42,7 @@ game_cpu = CPU(BOARD_SIZE, "CPU")
 
 if __name__ == "__main__":
     pygame.init()
+    GAME_FONT = pygame.font.Font("gfx/Cascadia.ttf", 25)
 
     running = True
     player_turn = False
@@ -75,9 +77,17 @@ if __name__ == "__main__":
                     ship_entity.update_sprite()
          
         game_screen.blit(BACKGROUND, (0,0))
-        pygame.draw.rect(game_screen, (0, 0, 0), (540, 0, 20, 720))
+        # pygame.draw.rect(game_screen, (0, 0, 0), (540, 0, 20, 720))
         board_blit(game_player.board, game_screen)
+        
+        player_stats = GAME_FONT.render("Player Stats here", False, (0,0,0))
+        game_screen.blit(player_stats, (game_player.board.init_pos[0] - 20,
+                                        game_player.board.init_pos[1] - 60))
         board_blit(game_cpu.board, game_screen)
+
+        cpu_stats = GAME_FONT.render("CPU Stats here", False, (0,0,0))
+        game_screen.blit(cpu_stats, (game_cpu.board.init_pos[0] - 20,
+                                        game_cpu.board.init_pos[1] - 60))
         pygame.display.flip()
     
     pygame.quit()

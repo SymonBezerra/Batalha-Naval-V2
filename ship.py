@@ -14,7 +14,7 @@ class Ship(pygame.sprite.Sprite):
         self.show_collision_block = False
 
         # self.surface = pygame.Surface((20,20))
-        self.image = pygame.image.load("sprites/closed_square.png").convert()
+        self.image = pygame.image.load("gfx/closed_square.png").convert()
         self.rect = self.image.get_rect()
         self.image = pygame.transform.scale(self.image, (35, 35))
 
@@ -24,10 +24,10 @@ class Ship(pygame.sprite.Sprite):
         
     def update_sprite (self) -> pygame.image:
         if self.hit and self.tag in ("N", "O"):
-            self.image = pygame.image.load("sprites/miss_square.png").convert()
+            self.image = pygame.image.load("gfx/miss_square.png").convert()
         elif self.hit and self.tag in ("R", "C", "B", "D"):
-            self.image = pygame.image.load("sprites/hit_square.png").convert()
+            self.image = pygame.image.load("gfx/hit_square.png").convert()
         elif self.show_collision_block and self.tag == "O":
-            self.image = pygame.image.load("sprites/collision_block_square.png").convert()
+            self.image = pygame.image.load("gfx/collision_block_square.png").convert()
         
         self.image = pygame.transform.scale(self.image, (35, 35))
