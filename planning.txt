@@ -1,8 +1,8 @@
 # mouse input X
-# ship collision blocks
-# auto board fill UNDER PROGRESS
-# manual board (player) fill
-    # mouse visual effect if board placement is avaliable
+# ship collision blocks X
+# auto board fill X
+# manual board (player) fill X
+    # mouse visual effect if board placement is avaliable CANCELLED
 
 # game loop
     # cpu randomshot
