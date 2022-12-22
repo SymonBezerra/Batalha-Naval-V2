@@ -36,23 +36,24 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
         for coordinate in ship_coordinates:
             ship: Ship = board.fleet_objects[coordinate[0]][coordinate[1]]
             ship.tag = ship_tag
+            ship_entity.update_sprite()
 
-            # ship_collision_blocks: list
-            # if coordinate == ship_coordinates[0]:
-            #     ship_collision_blocks = board.check_collision_blocks(coordinate,
-            #     ship_tag, direction, True, False)
-            # elif coordinate == ship_coordinates[len(ship_coordinates) - 1]:
-            #     ship_collision_blocks = board.check_collision_blocks(coordinate,
-            #     ship_tag, direction, False, False)
-            # else:
-            #     ship_collision_blocks = board.check_collision_blocks(coordinate,
-            #     ship_tag, direction, False, False)
+            ship_collision_blocks: list
+            if coordinate == ship_coordinates[0]:
+                ship_collision_blocks = board.check_collision_blocks(coordinate,
+                ship_tag, direction, True, False)
+            elif coordinate == ship_coordinates[len(ship_coordinates) - 1]:
+                ship_collision_blocks = board.check_collision_blocks(coordinate,
+                ship_tag, direction, False, False)
+            else:
+                ship_collision_blocks = board.check_collision_blocks(coordinate,
+                ship_tag, direction, False, False)
             
-            # for collision_block in ship_collision_blocks:
-            #     ship_cblock: Ship = board.fleet_objects[collision_block[0]][collision_block[1]]
-            #     ship_cblock.tag = "O" # collision block tag
-            #     ship_cblock.show_collision_block = True # debug
-            #     ship_cblock.update_sprite()
+            for collision_block in ship_collision_blocks:
+                ship_cblock: Ship = board.fleet_objects[collision_block[0]][collision_block[1]]
+                ship_cblock.tag = "O" # collision block tag
+                ship_cblock.show_collision_block = True # debug
+                ship_cblock.update_sprite()
 
             ship.hit = True # debug
 
@@ -99,6 +100,7 @@ if __name__ == "__main__":
                     ship_entity.coordinate,
                     game_player.board.rotation)
                     ship_entity.update_sprite()
+                    print("PLACE")
 
          
         game_screen.blit(BACKGROUND, (0,0))
@@ -113,6 +115,9 @@ if __name__ == "__main__":
         cpu_stats = GAME_FONT.render(game_cpu.board.stats, True, (0,0,0))
         game_screen.blit(cpu_stats, (game_cpu.board.init_pos[0] - 20,
                                         game_cpu.board.init_pos[1] - 100))
+
+        board_rotation = GAME_FONT.render(str(game_player.board.rotation), True, (0,0,0))
+        game_screen.blit(board_rotation, (540, 500))
         pygame.display.flip()
     
     pygame.quit()
