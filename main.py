@@ -44,7 +44,7 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
                 ship_tag, direction, True, False)
             elif coordinate == ship_coordinates[len(ship_coordinates) - 1]:
                 ship_collision_blocks = board.check_collision_blocks(coordinate,
-                ship_tag, direction, False, False)
+                ship_tag, direction, False, True)
             else:
                 ship_collision_blocks = board.check_collision_blocks(coordinate,
                 ship_tag, direction, False, False)
@@ -100,7 +100,7 @@ if __name__ == "__main__":
                     ship_entity.coordinate,
                     game_player.board.rotation)
                     ship_entity.update_sprite()
-                    print("PLACE")
+
 
          
         game_screen.blit(BACKGROUND, (0,0))
