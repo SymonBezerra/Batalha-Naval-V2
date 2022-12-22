@@ -127,59 +127,42 @@ class Board:
                                 direction: int, first_ship: bool, 
                                 last_ship: bool) -> list:
     
+        cblocks_coordinates = []
         # 0 = left, 1 = right, 2 = up, 3 = down
         if direction == 0:
-            cblocks_coordinates = []
             if first_ship and coordinate[0] + 1 < self.size:
                 cblocks_coordinates.append((coordinate[0] + 1, coordinate[1]))
-            #     return [(coordinate[0] + 1, coordinate[1]),
-            #             (coordinate[0], coordinate[1] - 1)
-            #             (coordinate[0], coordinate[1] + 1)]
             elif last_ship and coordinate[0] - 1 >= 0:
                 cblocks_coordinates.append((coordinate[0] - 1, coordinate[1]))
-            #     return [(coordinate[0] - 1, coordinate[1]),
-            #             (coordinate[0], coordinate[1] - 1),
-            #             (coordinate[0], coordinate[1] + 1)]
             if coordinate[1] - 1 >= 0:
                 cblocks_coordinates.append((coordinate[0], coordinate[1] - 1))
             if coordinate[1] + 1 < self.size:
                 cblocks_coordinates.append((coordinate[0], coordinate[1] + 1))
-            #     return [(coordinate[0], coordinate[1] - 1),
-            #             (coordinate[0], coordinate[1] + 1)]
-            return cblocks_coordinates
         elif direction == 1:
             if first_ship and coordinate[0] - 1 >= 0:
-                return [(coordinate[0] - 1, coordinate[1]),
-                        (coordinate[0], coordinate[1] - 1),
-                        (coordinate[0], coordinate[1] + 1)]
-            elif last_ship and coordinate[0] + 1 <= self.size:
-                return [(coordinate[0] + 1, coordinate[1]),
-                        (coordinate[0], coordinate[1] - 1),
-                        (coordinate[0], coordinate[1] + 1)]
-            else:
-                return [(coordinate[0], coordinate[1] - 1),
-                        (coordinate[0], coordinate[1] + 1)]
+                cblocks_coordinates.append((coordinate[0] - 1, coordinate[1]))
+            elif last_ship and coordinate[0] + 1 < self.size:
+                cblocks_coordinates.append((coordinate[0] + 1, coordinate[1]))
+            if coordinate[1] - 1 >= 0:
+                cblocks_coordinates.append((coordinate[0], coordinate[1] - 1))
+            if coordinate[1] + 1 < self.size:
+                cblocks_coordinates.append((coordinate[0], coordinate[1] + 1))
         elif direction == 2:
-            if first_ship and coordinate[1] + 1 <= self.size:
-                return [(coordinate[0], coordinate[1] - 1),
-                        (coordinate[0] - 1, coordinate[1]),
-                        (coordinate[0] + 1, coordinate[1])]
+            if first_ship and coordinate[1] + 1 < self.size:
+                cblocks_coordinates.append((coordinate[0], coordinate[1] + 1))
             elif last_ship and coordinate[1] - 1 >= 0:
-                return [(coordinate[0], coordinate[1] + 1),
-                        (coordinate[0] - 1, coordinate[1]),
-                        (coordinate[0] + 1, coordinate[1])]
-            else:
-                return [(coordinate[0] - 1, coordinate[1]),
-                        (coordinate[0] + 1, coordinate[1])]
+                cblocks_coordinates.append((coordinate[0], coordinate[1] - 1))
+            if coordinate[0] - 1 >= 0:
+                cblocks_coordinates.append((coordinate[0] - 1, coordinate[1]))
+            if coordinate[0] + 1 < self.size:
+                cblocks_coordinates.append((coordinate[0] + 1, coordinate[1]))
         elif direction == 3:
             if first_ship and coordinate[1] - 1 >= 0:
-                return [(coordinate[0], coordinate[1] - 1),
-                        (coordinate[0] - 1, coordinate[1]),
-                        (coordinate[0] + 1, coordinate[1])]
-            elif last_ship and coordinate[1] + 1 <= self.size:
-                return [(coordinate[0], coordinate[1] + 1),
-                        (coordinate[0] - 1, coordinate[1]),
-                        (coordinate[0] + 1, coordinate[1])]
-            else:
-                return [(coordinate[0] - 1, coordinate[1]),
-                        (coordinate[0] + 1, coordinate[1])]
+                cblocks_coordinates.append((coordinate[0], coordinate[1] - 1))
+            if last_ship and coordinate[1] + 1 < self.size:
+                cblocks_coordinates.append((coordinate[0], coordinate[1] + 1))
+            if coordinate[0] - 1 >= 0:
+                cblocks_coordinates.append((coordinate[0] - 1, coordinate[1]))
+            if coordinate[0] + 1 < self.size:
+                cblocks_coordinates.append((coordinate[0] + 1, coordinate[1]))
+        return cblocks_coordinates

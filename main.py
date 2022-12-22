@@ -36,7 +36,7 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
         for coordinate in ship_coordinates:
             ship: Ship = board.fleet_objects[coordinate[0]][coordinate[1]]
             ship.tag = ship_tag
-            ship_entity.update_sprite()
+            ship.update_sprite()
 
             ship_collision_blocks: list
             if coordinate == ship_coordinates[0]:
