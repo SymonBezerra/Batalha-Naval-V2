@@ -83,8 +83,11 @@ if __name__ == "__main__":
     GAME_SHIPS = ["D", "D", "C", "C", "B", "R"]
     next_ship = 0
 
+    game_tick = 0
+
     running = True
-    player_turn = False
+    game_on = False
+    player_turn, cpu_turn = True, False # alternated = sea battle!
     placing_ships = True
 
     auto_place_ships(game_cpu.board, GAME_SHIPS)
@@ -92,7 +95,7 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == MOUSEBUTTONDOWN and player_turn:
+            elif event.type == MOUSEBUTTONDOWN and game_on:
                 pos = pygame.mouse.get_pos()
                 ship_entity: Ship
                 for ship_entity in [entity for entity
@@ -101,7 +104,8 @@ if __name__ == "__main__":
                         ship_entity.set_hit()
                         game_player.board.last_hit_coord = ship_entity.coordinate
                         game_player.board.last_hit_tag = ship_entity.tag
-                        # print("HIT")
+                        if ship_entity.tag in ("N", "O"):
+                            player_turn, cpu_turn = False, True
             
             elif event.type == KEYDOWN and placing_ships:
                 if event.key == K_SPACE:
@@ -115,7 +119,20 @@ if __name__ == "__main__":
                     valid_place = place_ship(game_player.board, GAME_SHIPS[next_ship], 
                                 ship_entity.coordinate, game_player.board.rotation, True)
                     if valid_place: next_ship += 1
-                    if next_ship == 6: placing_ships, player_turn = False, True
+                    if next_ship == 6: placing_ships, game_on = False, True
+        
+        if cpu_turn:
+            if game_tick != 0:
+                pygame.time.delay(1000)
+                cpu_aim = game_cpu.randomshot()
+                cpu_target: Ship = game_player.board.fleet_objects[cpu_aim[0]][cpu_aim[1]]
+                cpu_target.set_hit()
+                if cpu_target.tag in ("N", "O"):
+                    player_turn, cpu_turn = True, False
+                game_tick = 0
+            else:
+                game_tick += 1
+            
          
         game_screen.blit(BACKGROUND, (0,0))
 
@@ -126,9 +143,9 @@ if __name__ == "__main__":
                                         game_player.board.init_pos[1] - 100))
         board_blit(game_cpu.board, game_screen)
 
-        # cpu_stats = GAME_FONT.render(game_cpu.board.stats, True, (0,0,0))
-        # game_screen.blit(cpu_stats, (game_cpu.board.init_pos[0] - 20,
-        #                                 game_cpu.board.init_pos[1] - 100))
+        cpu_stats = GAME_FONT.render(game_cpu.board.stats, True, (0,0,0))
+        game_screen.blit(cpu_stats, (game_cpu.board.init_pos[0] - 20,
+                                        game_cpu.board.init_pos[1] - 100))
 
         board_rotation = GAME_FONT.render(str(game_player.board.rotation), True, (0,0,0))
 
@@ -138,5 +155,6 @@ if __name__ == "__main__":
         
         game_screen.blit(board_rotation, (540, 500))
         pygame.display.flip()
+        clock.tick(20)
     
     pygame.quit()
