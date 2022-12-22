@@ -58,7 +58,7 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
                 # ship_cblock.show_collision_block = True # debug
                 ship_cblock.update_sprite()
 
-            if manual_input: ship.hit = True # debug
+            # if manual_input: ship.hit = True # debug
         
         return True
 

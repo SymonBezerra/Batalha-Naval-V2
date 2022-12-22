@@ -24,8 +24,8 @@ class Ship(pygame.sprite.Sprite):
         self.update_sprite()
         
     def update_sprite (self) -> pygame.image:
-        if not self.hit and self.player_name == "Player":
-            pass
+        if not self.hit and self.player_name == "Player" and self.tag not in ("N", "O"):
+            self.image = pygame.image.load("gfx/playership_square2.png").convert()
         elif self.hit and self.tag in ("N", "O"):
             self.image = pygame.image.load("gfx/miss_square.png").convert()
         elif self.hit and self.tag in ("R", "C", "B", "D"):
