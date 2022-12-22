@@ -5,7 +5,7 @@ class Player:
         self.name = name
         self.size = size
         self.board = Board(self.size, self.name)
-        self.lives = 5
+        self.lives = 19
         self.__initialize_game()
 
     def __initialize_game(self):
