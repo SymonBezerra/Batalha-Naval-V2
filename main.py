@@ -7,7 +7,6 @@ from board import Board
 
 BOARD_SIZE = 10
 game_screen = pygame.display.set_mode([1080, 720])
-pygame.init()
 pygame.display.set_caption("Batalha Naval")
 BACKGROUND = pygame.image.load("gfx/background.png").convert()
 COL_COORDS = pygame.image.load("gfx/col_coords.png").convert_alpha()
@@ -58,41 +57,52 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
 
             ship.hit = True # debug
 
-# start menu
 
-# instructions screen
+# game objects 
 
-# main game loop
-def game_on () -> None:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-        elif event.type == MOUSEBUTTONDOWN and player_turn:
-            pos = pygame.mouse.get_pos()
-            ship_entity: Ship
-            for ship_entity in [entity for entity
-                                in game_cpu.board.fleet_sprites
-                                if entity.rect.collidepoint(pos)]:
-                    ship_entity.set_hit()
-                    game_player.board.last_hit_coord = ship_entity.coordinate
-                    game_player.board.last_hit_tag = ship_entity.tag
-                    # print("HIT")
-        
-        elif event.type == KEYDOWN and placing_ships:
-            if event.key == K_SPACE:
-                game_player.board.rotate()
-        
-        elif event.type == MOUSEBUTTONDOWN and placing_ships:
-            pos = pygame.mouse.get_pos()
-            for ship_entity in [entity for entity
-                                in game_player.board.fleet_sprites
-                                if entity.rect.collidepoint(pos)]:
-                place_ship(game_player.board, "D", 
-                ship_entity.coordinate,
-                game_player.board.rotation)
-                ship_entity.update_sprite()
+game_player = Player(BOARD_SIZE, "Player")
+game_cpu = CPU(BOARD_SIZE, "CPU")
+
+if __name__ == "__main__":
+    pygame.init()
+    GAME_FONT = pygame.font.Font("gfx/Cascadia.ttf", 25)
+
+    running = True
+    player_turn = False
+    placing_ships = True
+
+    
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == MOUSEBUTTONDOWN and player_turn:
+                pos = pygame.mouse.get_pos()
+                ship_entity: Ship
+                for ship_entity in [entity for entity
+                                    in game_cpu.board.fleet_sprites
+                                    if entity.rect.collidepoint(pos)]:
+                        ship_entity.set_hit()
+                        game_player.board.last_hit_coord = ship_entity.coordinate
+                        game_player.board.last_hit_tag = ship_entity.tag
+                        # print("HIT")
+            
+            elif event.type == KEYDOWN and placing_ships:
+                if event.key == K_SPACE:
+                    game_player.board.rotate()
+            
+            elif event.type == MOUSEBUTTONDOWN and placing_ships:
+                pos = pygame.mouse.get_pos()
+                for ship_entity in [entity for entity
+                                    in game_player.board.fleet_sprites
+                                    if entity.rect.collidepoint(pos)]:
+                    place_ship(game_player.board, "C", 
+                    ship_entity.coordinate,
+                    game_player.board.rotation)
+                    ship_entity.update_sprite()
 
 
+         
         game_screen.blit(BACKGROUND, (0,0))
         # pygame.draw.rect(game_screen, (0, 0, 0), (540, 0, 20, 720))
         board_blit(game_player.board, game_screen)
@@ -109,19 +119,5 @@ def game_on () -> None:
         board_rotation = GAME_FONT.render(str(game_player.board.rotation), True, (0,0,0))
         game_screen.blit(board_rotation, (540, 500))
         pygame.display.flip()
-
-# game objects 
-
-game_player = Player(BOARD_SIZE, "Player")
-game_cpu = CPU(BOARD_SIZE, "CPU")
-
-
-if __name__ == "__main__":
-    GAME_FONT = pygame.font.Font("gfx/Cascadia.ttf", 25)
-
-    running = True
-    player_turn = False
-    placing_ships = True
     
-    while running:
-        game_on()
+    pygame.quit()
