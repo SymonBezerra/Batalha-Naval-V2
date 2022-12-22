@@ -104,7 +104,7 @@ if __name__ == "__main__":
 
          
         game_screen.blit(BACKGROUND, (0,0))
-        # pygame.draw.rect(game_screen, (0, 0, 0), (540, 0, 20, 720))
+
         board_blit(game_player.board, game_screen)
         
         player_stats = GAME_FONT.render(game_player.board.stats, True, (0,0,0))
