@@ -30,8 +30,7 @@ def board_blit(board: Board, screen: pygame.Surface):
     screen.blit(COL_COORDS, (board.init_pos[0] - 20, board.init_pos[1] - 60))
     screen.blit(LINE_COORDS, (board.init_pos[0] - 65, board.init_pos[1] - 20))
 
-def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: int,
-                manual_input: bool) -> True:
+def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: int) -> True:
     # set ship on place
     valid_placement = board.check_avaliable_placement(init_coordinate, ship_tag, direction)
     if valid_placement:
@@ -68,7 +67,7 @@ def auto_place_ships(board: Board, ships: list) -> None:
     ship_in_place = 0
     while ship_in_place < len(ships):
         valid_place = place_ship(board, ships[ship_in_place], 
-                                (randint(0,8), randint(0,8)), (randint(0,3)), False)
+                                (randint(0,8), randint(0,8)), (randint(0,3)))
         if valid_place: ship_in_place += 1
 
 # game objects 
@@ -119,7 +118,7 @@ if __name__ == "__main__":
                                     in game_player.board.fleet_sprites
                                     if entity.rect.collidepoint(pos)]:
                     valid_place = place_ship(game_player.board, GAME_SHIPS[next_ship], 
-                                ship_entity.coordinate, game_player.board.rotation, True)
+                                ship_entity.coordinate, game_player.board.rotation)
                     if valid_place: next_ship += 1
                     if next_ship == 6: placing_ships, game_on = False, True
         
