@@ -106,6 +106,8 @@ if __name__ == "__main__":
                         game_player.board.last_hit_tag = ship_entity.tag
                         if ship_entity.tag in ("N", "O"):
                             player_turn, cpu_turn = False, True
+                        else:
+                            game_cpu.lives -= 1
             
             elif event.type == KEYDOWN and placing_ships:
                 if event.key == K_SPACE:
@@ -121,7 +123,7 @@ if __name__ == "__main__":
                     if valid_place: next_ship += 1
                     if next_ship == 6: placing_ships, game_on = False, True
         
-        if cpu_turn:
+        if cpu_turn and game_on:
             if game_tick != 0:
                 pygame.time.delay(1000)
                 cpu_aim = game_cpu.randomshot()
@@ -129,6 +131,8 @@ if __name__ == "__main__":
                 cpu_target.set_hit()
                 if cpu_target.tag in ("N", "O"):
                     player_turn, cpu_turn = True, False
+                else:
+                    game_player.lives -= 1
                 game_tick = 0
             else:
                 game_tick += 1
@@ -152,6 +156,9 @@ if __name__ == "__main__":
         if placing_ships:
             game_screen.blit(GAME_FONT.render(f"Next ship is: {GAME_SHIPS[next_ship]}",
                             True, (0,0,0)), (540, 600))
+
+        if game_cpu.lives == 0 or game_player.lives == 0:
+            game_on = False # game loop can be stopped
         
         game_screen.blit(board_rotation, (540, 500))
         pygame.display.flip()
