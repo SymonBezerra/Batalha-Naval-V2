@@ -58,7 +58,7 @@ class Board:
 
     def check_avaliable_placement (self, init_coordinate: tuple, ship_tag: str,
                                     direction: int) -> bool:
-        # 0 =left, 1 = right, 2 = up, 3 = down
+        # 0 = left, 1 = right, 2 = up, 3 = down
         coordinates = self.adjacent_coordinates(init_coordinate, ship_tag, direction)
         if direction == 0:
             if init_coordinate[0] + 1 - SHIP_SIZES[ship_tag] < 0:
@@ -67,7 +67,7 @@ class Board:
                 for coordinate in coordinates:
                     ship: Ship
                     ship = self.fleet_objects[coordinate[0]][coordinate[1]]
-                    if ship.tag != "N":
+                    if ship_tag not in ("N", "O"):
                         return False
             return True
         
@@ -78,7 +78,7 @@ class Board:
                 for coordinate in coordinates:
                     ship: Ship
                     ship = self.fleet_objects[coordinate[0]][coordinate[1]]
-                    if ship.tag != "N":
+                    if ship_tag not in ("N", "O"):
                         return False
             return True
         
@@ -89,7 +89,7 @@ class Board:
                 for coordinate in coordinates:
                     ship: Ship
                     ship = self.fleet_objects[coordinate[0]][coordinate[1]]
-                    if ship.tag != "N":
+                    if ship_tag not in ("N", "O"):
                         return False
             return True
         
@@ -100,7 +100,7 @@ class Board:
                 for coordinate in coordinates:
                     ship: Ship
                     ship = self.fleet_objects[coordinate[0]][coordinate[1]]
-                    if ship.tag != "N":
+                    if ship_tag not in ("N", "O"):
                         return False
             return True
 
@@ -121,3 +121,58 @@ class Board:
                 coordinates.append((init_coordinate[0], init_coordinate[1] + i))
 
         return coordinates
+
+    
+    def check_collision_blocks (self, coordinate, ship_tag: str, 
+                                direction: int, first_ship: bool, 
+                                last_ship: bool) -> list:
+        
+        # 0 = left, 1 = right, 2 = up, 3 = down
+        if direction == 0:
+            if first_ship and coordinate[0] + 1 <= self.size:
+                return [(coordinate[0] + 1, coordinate[1]),
+                        (coordinate[0, coordinate[1] - 1]),
+                        (coordinate[0, coordinate[1] + 1])]
+            elif last_ship and coordinate[0] - 1 >= 0:
+                return [(coordinate[0] - 1, coordinate[1]),
+                        (coordinate[0, coordinate[1] - 1]),
+                        (coordinate[0, coordinate[1] + 1])]
+            else:
+                return [(coordinate[0, coordinate[1] - 1]),
+                        (coordinate[0, coordinate[1] + 1])]
+        elif direction == 1:
+            if first_ship and coordinate[0] - 1 >= 0:
+                return [(coordinate[0] - 1, coordinate[1]),
+                        (coordinate[0, coordinate[1] - 1]),
+                        (coordinate[0, coordinate[1] + 1])]
+            elif last_ship and coordinate[0] + 1 <= self.size:
+                return [(coordinate[0] + 1, coordinate[1]),
+                        (coordinate[0, coordinate[1] - 1]),
+                        (coordinate[0, coordinate[1] + 1])]
+            else:
+                return [(coordinate[0, coordinate[1] - 1]),
+                        (coordinate[0, coordinate[1] + 1])]
+        elif direction == 2:
+            if first_ship and coordinate[1] + 1 <= self.size:
+                return [(coordinate[0], coordinate[1] - 1,
+                        coordinate[0] - 1, coordinate[1],
+                        coordinate[0] + 1, coordinate[1])]
+            elif last_ship and coordinate[1] - 1 >= 0:
+                return [(coordinate[0], coordinate[1] + 1,
+                        coordinate[0] - 1, coordinate[1],
+                        coordinate[0] + 1, coordinate[1])]
+            else:
+                return [(coordinate[0] - 1, coordinate[1],
+                        coordinate[0] + 1, coordinate[1])]
+        elif direction == 3:
+            if first_ship and coordinate[1] - 1 >= 0:
+                return [(coordinate[0], coordinate[1] - 1,
+                        coordinate[0] - 1, coordinate[1],
+                        coordinate[0] + 1, coordinate[1])]
+            elif last_ship and coordinate[1] + 1 <= self.size:
+                return [(coordinate[0], coordinate[1] + 1,
+                        coordinate[0] - 1, coordinate[1],
+                        coordinate[0] + 1, coordinate[1])]
+            else:
+                return [(coordinate[0] - 1, coordinate[1],
+                        coordinate[0] + 1, coordinate[1])]

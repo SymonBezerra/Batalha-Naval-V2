@@ -1,5 +1,6 @@
 # mouse input X
-# auto board fill 
+# ship collision blocks
+# auto board fill
 # manual board (player) fill
     # mouse visual effect if board placement is avaliable
 

@@ -21,6 +21,7 @@ class Ship(pygame.sprite.Sprite):
     def set_hit (self) -> None:
         self.hit = True
         self.update_sprite()
+        pygame.display.flip()
         
     def update_sprite (self) -> pygame.image:
         if self.hit and self.tag in ("N", "O"):
