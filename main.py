@@ -52,7 +52,7 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
             for collision_block in ship_collision_blocks:
                 ship_cblock: Ship = board.fleet_objects[collision_block[0]][collision_block[1]]
                 ship_cblock.tag = "O" # collision block tag
-                ship_cblock.show_collision_block = True # debug
+                # ship_cblock.show_collision_block = True # debug
                 ship_cblock.update_sprite()
 
             ship.hit = True # debug
