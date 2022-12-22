@@ -4,11 +4,13 @@ from ship import Ship
 from player import Player
 from cpu import CPU
 from board import Board
+from random import randint
 
 BOARD_SIZE = 10
-game_screen = pygame.display.set_mode([1080, 720])
+game_screen = pygame.display.set_mode([1200, 800])
 pygame.display.set_caption("Batalha Naval")
 BACKGROUND = pygame.image.load("gfx/background.png").convert()
+BACKGROUND = pygame.transform.scale(BACKGROUND, (1200, 800))
 COL_COORDS = pygame.image.load("gfx/col_coords.png").convert_alpha()
 LINE_COORDS = pygame.image.load("gfx/line_coords.png").convert_alpha()
 # not used for this version
@@ -28,7 +30,8 @@ def board_blit(board: Board, screen: pygame.Surface):
     screen.blit(COL_COORDS, (board.init_pos[0] - 20, board.init_pos[1] - 60))
     screen.blit(LINE_COORDS, (board.init_pos[0] - 65, board.init_pos[1] - 20))
 
-def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: int) -> None:
+def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: int,
+                manual_input: bool) -> True:
     # set ship on place
     valid_placement = board.check_avaliable_placement(init_coordinate, ship_tag, direction)
     if valid_placement:
@@ -52,11 +55,21 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
             for collision_block in ship_collision_blocks:
                 ship_cblock: Ship = board.fleet_objects[collision_block[0]][collision_block[1]]
                 ship_cblock.tag = "O" # collision block tag
-                ship_cblock.show_collision_block = True # debug
+                # ship_cblock.show_collision_block = True # debug
                 ship_cblock.update_sprite()
 
-            ship.hit = True # debug
+            if manual_input: ship.hit = True # debug
+        
+        return True
 
+    else: return False
+
+def auto_place_ships(board: Board, ships: list) -> None:
+    ship_in_place = 0
+    while ship_in_place < len(ships):
+        valid_place = place_ship(board, ships[ship_in_place], 
+                                (randint(0,8), randint(0,8)), (randint(0,3)), False)
+        if valid_place: ship_in_place += 1
 
 # game objects 
 
@@ -67,11 +80,14 @@ if __name__ == "__main__":
     pygame.init()
     GAME_FONT = pygame.font.Font("gfx/Cascadia.ttf", 25)
 
+    GAME_SHIPS = ["D", "D", "C", "C", "B", "R"]
+    next_ship = 0
+
     running = True
     player_turn = False
     placing_ships = True
 
-    
+    auto_place_ships(game_cpu.board, GAME_SHIPS)
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -96,12 +112,10 @@ if __name__ == "__main__":
                 for ship_entity in [entity for entity
                                     in game_player.board.fleet_sprites
                                     if entity.rect.collidepoint(pos)]:
-                    place_ship(game_player.board, "C", 
-                    ship_entity.coordinate,
-                    game_player.board.rotation)
-                    ship_entity.update_sprite()
-
-
+                    valid_place = place_ship(game_player.board, GAME_SHIPS[next_ship], 
+                                ship_entity.coordinate, game_player.board.rotation, True)
+                    if valid_place: next_ship += 1
+                    if next_ship == 6: placing_ships, player_turn = False, True
          
         game_screen.blit(BACKGROUND, (0,0))
 
@@ -112,11 +126,16 @@ if __name__ == "__main__":
                                         game_player.board.init_pos[1] - 100))
         board_blit(game_cpu.board, game_screen)
 
-        cpu_stats = GAME_FONT.render(game_cpu.board.stats, True, (0,0,0))
-        game_screen.blit(cpu_stats, (game_cpu.board.init_pos[0] - 20,
-                                        game_cpu.board.init_pos[1] - 100))
+        # cpu_stats = GAME_FONT.render(game_cpu.board.stats, True, (0,0,0))
+        # game_screen.blit(cpu_stats, (game_cpu.board.init_pos[0] - 20,
+        #                                 game_cpu.board.init_pos[1] - 100))
 
         board_rotation = GAME_FONT.render(str(game_player.board.rotation), True, (0,0,0))
+
+        if placing_ships:
+            game_screen.blit(GAME_FONT.render(f"Next ship is: {GAME_SHIPS[next_ship]}",
+                            True, (0,0,0)), (540, 600))
+        
         game_screen.blit(board_rotation, (540, 500))
         pygame.display.flip()
     

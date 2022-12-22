@@ -11,7 +11,7 @@ class Player:
         for i in range(self.size):
             fleet_objects = []
             for j in range(self.size):
-                ship = Ship("N", (i,j))
+                ship = Ship("N", (i,j), self.name)
                 fleet_objects.append(ship)
                 self.board.fleet_sprites.add(ship)
 

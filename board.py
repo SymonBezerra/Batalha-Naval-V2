@@ -20,9 +20,9 @@ class Board:
 
         self.init_pos = (0,0)
         if player_name == "Player": 
-            self.init_pos = (100, 200)
+            self.init_pos = (200, 200)
         else: 
-            self.init_pos = (630, 200)
+            self.init_pos = (700, 200)
 
     # def __board_test (self, fleet: pygame.sprite.Group):
     #     for i in range(self.size):
@@ -50,6 +50,12 @@ class Board:
             ship: Ship = self.fleet_objects[coordinate[0]][coordinate[1]]
             ship.tag = tag
             ship.update()
+
+    def hide_all_ships (self) -> None:
+        ship: Ship
+        for ship in self.fleet_sprites:
+            ship.hit = False
+            ship.show_collision_block = False
     
     def rotate (self) -> None:
         if self.rotation < 3: self.rotation += 1

@@ -4,8 +4,9 @@ SHIP_TAGS = {"R": "Carrier", "B": "Battleship",
             "C": "Cruiser", "D": "Destroyer", "N": "Miss", "O": "Miss"}
 SHIP_SIZES = {"R": 5, "B": 4, "C": 3, "D": 2, "N": 0, "O": 0}
 class Ship(pygame.sprite.Sprite):
-    def __init__(self, tag: str, coordinate: tuple):
+    def __init__(self, tag: str, coordinate: tuple, player_name: str):
         super(Ship, self).__init__()
+        self.player_name = player_name
         self.tag = tag
         self.name = SHIP_TAGS[tag] 
         self.coordinate = coordinate
@@ -23,7 +24,9 @@ class Ship(pygame.sprite.Sprite):
         self.update_sprite()
         
     def update_sprite (self) -> pygame.image:
-        if self.hit and self.tag in ("N", "O"):
+        if not self.hit and self.player_name == "Player":
+            pass
+        elif self.hit and self.tag in ("N", "O"):
             self.image = pygame.image.load("gfx/miss_square.png").convert()
         elif self.hit and self.tag in ("R", "C", "B", "D"):
             self.image = pygame.image.load("gfx/hit_square.png").convert()
