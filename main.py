@@ -52,7 +52,7 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
             for collision_block in ship_collision_blocks:
                 ship_cblock: Ship = board.fleet_objects[collision_block[0]][collision_block[1]]
                 ship_cblock.tag = "O" # collision block tag
-                # ship_cblock.show_collision_block = True # debug
+                ship_cblock.show_collision_block = True # debug
                 ship_cblock.update_sprite()
 
             ship.hit = True # debug
@@ -71,53 +71,57 @@ if __name__ == "__main__":
     player_turn = False
     placing_ships = True
 
+    game_loop = True
+
     
     while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == MOUSEBUTTONDOWN and player_turn:
-                pos = pygame.mouse.get_pos()
-                ship_entity: Ship
-                for ship_entity in [entity for entity
-                                    in game_cpu.board.fleet_sprites
-                                    if entity.rect.collidepoint(pos)]:
-                        ship_entity.set_hit()
-                        game_player.board.last_hit_coord = ship_entity.coordinate
-                        game_player.board.last_hit_tag = ship_entity.tag
-                        # print("HIT")
+        # main game loop
+        if game_loop:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == MOUSEBUTTONDOWN and player_turn:
+                    pos = pygame.mouse.get_pos()
+                    ship_entity: Ship
+                    for ship_entity in [entity for entity
+                                        in game_cpu.board.fleet_sprites
+                                        if entity.rect.collidepoint(pos)]:
+                            ship_entity.set_hit()
+                            game_player.board.last_hit_coord = ship_entity.coordinate
+                            game_player.board.last_hit_tag = ship_entity.tag
+                            # print("HIT")
+                
+                elif event.type == KEYDOWN and placing_ships:
+                    if event.key == K_SPACE:
+                        game_player.board.rotate()
+                
+                elif event.type == MOUSEBUTTONDOWN and placing_ships:
+                    pos = pygame.mouse.get_pos()
+                    for ship_entity in [entity for entity
+                                        in game_player.board.fleet_sprites
+                                        if entity.rect.collidepoint(pos)]:
+                        place_ship(game_player.board, "D", 
+                        ship_entity.coordinate,
+                        game_player.board.rotation)
+                        ship_entity.update_sprite()
+
+
             
-            elif event.type == KEYDOWN and placing_ships:
-                if event.key == K_SPACE:
-                    game_player.board.rotate()
+            game_screen.blit(BACKGROUND, (0,0))
+            # pygame.draw.rect(game_screen, (0, 0, 0), (540, 0, 20, 720))
+            board_blit(game_player.board, game_screen)
             
-            elif event.type == MOUSEBUTTONDOWN and placing_ships:
-                pos = pygame.mouse.get_pos()
-                for ship_entity in [entity for entity
-                                    in game_player.board.fleet_sprites
-                                    if entity.rect.collidepoint(pos)]:
-                    place_ship(game_player.board, "C", 
-                    ship_entity.coordinate,
-                    game_player.board.rotation)
-                    ship_entity.update_sprite()
+            player_stats = GAME_FONT.render(game_player.board.stats, True, (0,0,0))
+            game_screen.blit(player_stats, (game_player.board.init_pos[0] - 20,
+                                            game_player.board.init_pos[1] - 100))
+            board_blit(game_cpu.board, game_screen)
 
+            cpu_stats = GAME_FONT.render(game_cpu.board.stats, True, (0,0,0))
+            game_screen.blit(cpu_stats, (game_cpu.board.init_pos[0] - 20,
+                                            game_cpu.board.init_pos[1] - 100))
 
-         
-        game_screen.blit(BACKGROUND, (0,0))
-        # pygame.draw.rect(game_screen, (0, 0, 0), (540, 0, 20, 720))
-        board_blit(game_player.board, game_screen)
-        
-        player_stats = GAME_FONT.render(game_player.board.stats, True, (0,0,0))
-        game_screen.blit(player_stats, (game_player.board.init_pos[0] - 20,
-                                        game_player.board.init_pos[1] - 100))
-        board_blit(game_cpu.board, game_screen)
-
-        cpu_stats = GAME_FONT.render(game_cpu.board.stats, True, (0,0,0))
-        game_screen.blit(cpu_stats, (game_cpu.board.init_pos[0] - 20,
-                                        game_cpu.board.init_pos[1] - 100))
-
-        board_rotation = GAME_FONT.render(str(game_player.board.rotation), True, (0,0,0))
-        game_screen.blit(board_rotation, (540, 500))
-        pygame.display.flip()
+            board_rotation = GAME_FONT.render(str(game_player.board.rotation), True, (0,0,0))
+            game_screen.blit(board_rotation, (540, 500))
+            pygame.display.flip()
     
     pygame.quit()
