@@ -58,6 +58,11 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
 
             ship.hit = True # debug
 
+# start menu
+
+# instructions screen
+
+# main game loop
 def game_on () -> None:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
