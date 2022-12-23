@@ -133,6 +133,8 @@ if __name__ == "__main__":
                     player_turn, cpu_turn = True, False
                 else:
                     game_player.lives -= 1
+                    game_cpu.board.last_hit_coord = cpu_target.coordinate
+                    game_cpu.board.last_hit_tag = cpu_target.tag
                 game_tick = 0
             else:
                 game_tick += 1
