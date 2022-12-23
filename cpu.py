@@ -11,5 +11,5 @@ class CPU(Player):
             for j in range(self.size):
                 self.remaining_shots.append((i,j))
 
-    def randomshot (self):
+    def randomshot (self) -> tuple:
         return self.remaining_shots.pop(randint(0, len(self.remaining_shots) - 1))
