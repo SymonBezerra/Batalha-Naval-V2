@@ -111,6 +111,12 @@ if __name__ == "__main__":
     player_turn, cpu_turn = True, False # alternated = sea battle!
     placing_ships = True
 
+    game_screen.blit(BACKGROUND, (0,0))
+
+    # placing_ships arrow sprite
+    rotation_arrow = pygame.sprite.Sprite()
+    rotation_arrow.image = ARROW_DIRECTIONS[game_player.board.rotation]
+
     auto_place_ships(game_cpu.board, GAME_SHIPS)
     while running:
         # main menu will STUCK instead of switch loops
@@ -120,6 +126,9 @@ if __name__ == "__main__":
                     pygame.quit()
                 elif event.type == MOUSEBUTTONDOWN:
                     start_menu = False
+        
+            game_screen.blit(BACKGROUND, (0,0))
+            pygame.display.flip()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -141,6 +150,7 @@ if __name__ == "__main__":
             elif event.type == KEYDOWN and placing_ships:
                 if event.key == K_SPACE:
                     game_player.board.rotate()
+                    rotation_arrow.image = ARROW_DIRECTIONS[game_player.board.rotation]
             
             elif event.type == MOUSEBUTTONDOWN and placing_ships:
                 pos = pygame.mouse.get_pos()
@@ -168,8 +178,6 @@ if __name__ == "__main__":
             else:
                 game_tick += 1
             
-        
-        game_screen.blit(BACKGROUND, (0,0))
 
         board_blit(game_player.board, game_screen)
         
@@ -189,8 +197,8 @@ if __name__ == "__main__":
             game_screen.blit(next_ship_button, next_ship_button_rect)
             game_screen.blit(GAME_FONT.render(f"Next ship is: {GAME_SHIPS[next_ship]}",
                             True, (0,0,0)), (200, 600))
-            game_screen.blit(ARROW_DIRECTIONS[game_player.board.rotation],
-            ARROW_DIRECTIONS[game_player.board.rotation].get_rect(center=(475,620)))
+            game_screen.blit(rotation_arrow.image,
+            rotation_arrow.image.get_rect(center=(475,620)))
 
         if game_cpu.lives == 0 or game_player.lives == 0:
             game_on = False # game loop can be stopped
