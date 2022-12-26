@@ -111,8 +111,6 @@ if __name__ == "__main__":
     player_turn, cpu_turn = True, False # alternated = sea battle!
     placing_ships = True
 
-    game_screen.blit(BACKGROUND, (0,0))
-
     # placing_ships arrow sprite
     rotation_arrow = pygame.sprite.Sprite()
     rotation_arrow.image = ARROW_DIRECTIONS[game_player.board.rotation]
@@ -121,6 +119,7 @@ if __name__ == "__main__":
     while running:
         # main menu will STUCK instead of switch loops
         while start_menu:
+            game_screen.blit(BACKGROUND, (0,0))
             for event in pygame.event.get():
                 if event == pygame.quit:
                     pygame.quit()
@@ -129,6 +128,8 @@ if __name__ == "__main__":
         
             game_screen.blit(BACKGROUND, (0,0))
             pygame.display.flip()
+        
+        game_screen.blit(BACKGROUND, (0,0))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
