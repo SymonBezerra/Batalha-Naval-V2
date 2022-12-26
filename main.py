@@ -13,6 +13,16 @@ BACKGROUND = pygame.image.load("gfx/background.png").convert()
 BACKGROUND = pygame.transform.scale(BACKGROUND, (1200, 800))
 COL_COORDS = pygame.image.load("gfx/col_coords.png").convert_alpha()
 LINE_COORDS = pygame.image.load("gfx/line_coords.png").convert_alpha()
+GAME_TITLE =  pygame.image.load("gfx/game_title.png").convert_alpha()
+
+START_BUTTON = pygame.image.load("gfx/button_start.png")
+START_BUTTON = pygame.transform.scale(START_BUTTON, (200, 120))
+
+HOWTO_BUTTON = pygame.image.load("gfx/button_howtoplay.png")
+HOWTO_BUTTON = pygame.transform.scale(HOWTO_BUTTON, (200, 120))
+
+EXIT_BUTTON = pygame.image.load("gfx/button_exit.png")
+EXIT_BUTTON = pygame.transform.scale(EXIT_BUTTON, (200, 120))
 
 # loading and rescaling arrow sprites (for board positioning)
 arrow_up = pygame.image.load("gfx/arrow_up.png").convert_alpha()
@@ -120,13 +130,17 @@ if __name__ == "__main__":
         # main menu will STUCK instead of switch loops
         while start_menu:
             game_screen.blit(BACKGROUND, (0,0))
+            # game title
+            game_screen.blit(GAME_TITLE, GAME_TITLE.get_rect(center=(600,250)))
+
+            # buttons
+            
             for event in pygame.event.get():
                 if event == pygame.quit:
                     pygame.quit()
                 elif event.type == MOUSEBUTTONDOWN:
                     start_menu = False
-        
-            game_screen.blit(BACKGROUND, (0,0))
+            
             pygame.display.flip()
         
         # if not duplicated, the rotation arrow
@@ -135,7 +149,7 @@ if __name__ == "__main__":
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                pygame.quit()
             elif event.type == MOUSEBUTTONDOWN and game_on:
                 pos = pygame.mouse.get_pos()
                 ship_entity: Ship
