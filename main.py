@@ -113,82 +113,89 @@ if __name__ == "__main__":
 
     auto_place_ships(game_cpu.board, GAME_SHIPS)
     while running:
-        if game_on:
+        # main menu will STUCK instead of switch loops
+        while start_menu:
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                elif event.type == MOUSEBUTTONDOWN and game_on:
-                    pos = pygame.mouse.get_pos()
-                    ship_entity: Ship
-                    for ship_entity in [entity for entity
-                                        in game_cpu.board.fleet_sprites
-                                        if entity.rect.collidepoint(pos)]:
-                            ship_entity.set_hit()
-                            game_player.board.last_hit_coord = ship_entity.coordinate
-                            game_player.board.last_hit_tag = ship_entity.tag
-                            if ship_entity.tag in ("N", "O"):
-                                player_turn, cpu_turn = False, True
-                            else:
-                                game_cpu.lives -= 1
-                
-                elif event.type == KEYDOWN and placing_ships:
-                    if event.key == K_SPACE:
-                        game_player.board.rotate()
-                
-                elif event.type == MOUSEBUTTONDOWN and placing_ships:
-                    pos = pygame.mouse.get_pos()
-                    for ship_entity in [entity for entity
-                                        in game_player.board.fleet_sprites
-                                        if entity.rect.collidepoint(pos)]:
-                        valid_place = place_ship(game_player.board, GAME_SHIPS[next_ship], 
-                                    ship_entity.coordinate, game_player.board.rotation)
-                        if valid_place: next_ship += 1
-                        if next_ship == 6: placing_ships, game_on = False, True
+                if event == pygame.quit:
+                    pygame.quit()
+                elif event.type == MOUSEBUTTONDOWN:
+                    start_menu = False
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == MOUSEBUTTONDOWN and game_on:
+                pos = pygame.mouse.get_pos()
+                ship_entity: Ship
+                for ship_entity in [entity for entity
+                                    in game_cpu.board.fleet_sprites
+                                    if entity.rect.collidepoint(pos)]:
+                        ship_entity.set_hit()
+                        game_player.board.last_hit_coord = ship_entity.coordinate
+                        game_player.board.last_hit_tag = ship_entity.tag
+                        if ship_entity.tag in ("N", "O"):
+                            player_turn, cpu_turn = False, True
+                        else:
+                            game_cpu.lives -= 1
             
-            if cpu_turn and game_on:
-                if game_tick != 0:
-                    pygame.time.delay(1000)
-                    cpu_aim = game_cpu.randomshot()
-                    cpu_target: Ship = game_player.board.fleet_objects[cpu_aim[0]][cpu_aim[1]]
-                    cpu_target.set_hit()
-                    if cpu_target.tag in ("N", "O"):
-                        player_turn, cpu_turn = True, False
-                    else:
-                        game_player.lives -= 1
-                    game_cpu.board.last_hit_coord = cpu_target.coordinate
-                    game_cpu.board.last_hit_tag = cpu_target.tag
-                    game_tick = 0
-                else:
-                    game_tick += 1
-                
+            elif event.type == KEYDOWN and placing_ships:
+                if event.key == K_SPACE:
+                    game_player.board.rotate()
             
-            game_screen.blit(BACKGROUND, (0,0))
-
-            board_blit(game_player.board, game_screen)
-            
-            player_stats = GAME_FONT.render(game_player.board.stats, True, (0,0,0))
-            game_screen.blit(player_stats, (game_player.board.init_pos[0] - 20,
-                                            game_player.board.init_pos[1] - 100))
-            board_blit(game_cpu.board, game_screen)
-
-            cpu_stats = GAME_FONT.render(game_cpu.board.stats, True, (0,0,0))
-            game_screen.blit(cpu_stats, (game_cpu.board.init_pos[0] - 20,
-                                            game_cpu.board.init_pos[1] - 100))
-
-            # board_rotation = GAME_FONT.render(str(game_player.board.rotation), True, (0,0,0))
-            # game_screen.blit(board_rotation, (540, 500))
-
-            if placing_ships:
-                game_screen.blit(next_ship_button, next_ship_button_rect)
-                game_screen.blit(GAME_FONT.render(f"Next ship is: {GAME_SHIPS[next_ship]}",
-                                True, (0,0,0)), (200, 600))
-                game_screen.blit(ARROW_DIRECTIONS[game_player.board.rotation],
-                ARROW_DIRECTIONS[game_player.board.rotation].get_rect(center=(475,620)))
-
-            if game_cpu.lives == 0 or game_player.lives == 0:
-                game_on = False # game loop can be stopped
-            
-            pygame.display.flip()
-            clock.tick(20)
+            elif event.type == MOUSEBUTTONDOWN and placing_ships:
+                pos = pygame.mouse.get_pos()
+                for ship_entity in [entity for entity
+                                    in game_player.board.fleet_sprites
+                                    if entity.rect.collidepoint(pos)]:
+                    valid_place = place_ship(game_player.board, GAME_SHIPS[next_ship], 
+                                ship_entity.coordinate, game_player.board.rotation)
+                    if valid_place: next_ship += 1
+                    if next_ship == 6: placing_ships, game_on = False, True
         
-        pygame.quit()
+        if cpu_turn and game_on:
+            if game_tick != 0:
+                pygame.time.delay(1000)
+                cpu_aim = game_cpu.randomshot()
+                cpu_target: Ship = game_player.board.fleet_objects[cpu_aim[0]][cpu_aim[1]]
+                cpu_target.set_hit()
+                if cpu_target.tag in ("N", "O"):
+                    player_turn, cpu_turn = True, False
+                else:
+                    game_player.lives -= 1
+                game_cpu.board.last_hit_coord = cpu_target.coordinate
+                game_cpu.board.last_hit_tag = cpu_target.tag
+                game_tick = 0
+            else:
+                game_tick += 1
+            
+        
+        game_screen.blit(BACKGROUND, (0,0))
+
+        board_blit(game_player.board, game_screen)
+        
+        player_stats = GAME_FONT.render(game_player.board.stats, True, (0,0,0))
+        game_screen.blit(player_stats, (game_player.board.init_pos[0] - 20,
+                                        game_player.board.init_pos[1] - 100))
+        board_blit(game_cpu.board, game_screen)
+
+        cpu_stats = GAME_FONT.render(game_cpu.board.stats, True, (0,0,0))
+        game_screen.blit(cpu_stats, (game_cpu.board.init_pos[0] - 20,
+                                        game_cpu.board.init_pos[1] - 100))
+
+        # board_rotation = GAME_FONT.render(str(game_player.board.rotation), True, (0,0,0))
+        # game_screen.blit(board_rotation, (540, 500))
+
+        if placing_ships:
+            game_screen.blit(next_ship_button, next_ship_button_rect)
+            game_screen.blit(GAME_FONT.render(f"Next ship is: {GAME_SHIPS[next_ship]}",
+                            True, (0,0,0)), (200, 600))
+            game_screen.blit(ARROW_DIRECTIONS[game_player.board.rotation],
+            ARROW_DIRECTIONS[game_player.board.rotation].get_rect(center=(475,620)))
+
+        if game_cpu.lives == 0 or game_player.lives == 0:
+            game_on = False # game loop can be stopped
+        
+        pygame.display.flip()
+        clock.tick(20)
+    
+    pygame.quit()
