@@ -13,6 +13,26 @@ BACKGROUND = pygame.image.load("gfx/background.png").convert()
 BACKGROUND = pygame.transform.scale(BACKGROUND, (1200, 800))
 COL_COORDS = pygame.image.load("gfx/col_coords.png").convert_alpha()
 LINE_COORDS = pygame.image.load("gfx/line_coords.png").convert_alpha()
+
+# loading and rescaling arrow sprites (for board positioning)
+arrow_up = pygame.image.load("gfx/arrow_up.png").convert_alpha()
+arrow_up = pygame.transform.scale(arrow_up, (75,75))
+
+arrow_down = pygame.image.load("gfx/arrow_down.png").convert_alpha()
+arrow_down = pygame.transform.scale(arrow_down, (75,75))
+
+arrow_left = pygame.image.load("gfx/arrow_left.png").convert_alpha()
+arrow_left = pygame.transform.scale(arrow_left, (75,75))
+
+arrow_right = pygame.image.load("gfx/arrow_right.png").convert_alpha()
+arrow_right = pygame.transform.scale(arrow_right, (75,75))
+
+ARROW_DIRECTIONS = (arrow_left, arrow_right, arrow_up, arrow_down)
+
+# button sprites (and different scales)
+next_ship_button = pygame.image.load("gfx/button_sprite.png")
+next_ship_button = pygame.transform.scale(next_ship_button, (250, 100))
+next_ship_button_rect = next_ship_button.get_rect(center=(310,620))
 # not used for this version
 clock = pygame.time.Clock()
 
@@ -152,16 +172,19 @@ if __name__ == "__main__":
         game_screen.blit(cpu_stats, (game_cpu.board.init_pos[0] - 20,
                                         game_cpu.board.init_pos[1] - 100))
 
-        board_rotation = GAME_FONT.render(str(game_player.board.rotation), True, (0,0,0))
+        # board_rotation = GAME_FONT.render(str(game_player.board.rotation), True, (0,0,0))
+        # game_screen.blit(board_rotation, (540, 500))
 
         if placing_ships:
+            game_screen.blit(next_ship_button, next_ship_button_rect)
             game_screen.blit(GAME_FONT.render(f"Next ship is: {GAME_SHIPS[next_ship]}",
-                            True, (0,0,0)), (540, 600))
+                            True, (0,0,0)), (200, 600))
+            game_screen.blit(ARROW_DIRECTIONS[game_player.board.rotation],
+            ARROW_DIRECTIONS[game_player.board.rotation].get_rect(center=(475,620)))
 
         if game_cpu.lives == 0 or game_player.lives == 0:
             game_on = False # game loop can be stopped
         
-        game_screen.blit(board_rotation, (540, 500))
         pygame.display.flip()
         clock.tick(20)
     
