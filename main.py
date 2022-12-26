@@ -129,6 +129,8 @@ if __name__ == "__main__":
             game_screen.blit(BACKGROUND, (0,0))
             pygame.display.flip()
         
+        # if not duplicated, the rotation arrow
+        # will not update its image
         game_screen.blit(BACKGROUND, (0,0))
 
         for event in pygame.event.get():
