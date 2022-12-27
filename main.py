@@ -6,6 +6,10 @@ from cpu import CPU
 from board import Board
 from random import randint
 
+# framerate and sfx
+mixer = pygame.mixer.init()
+clock = pygame.time.Clock()
+
 BOARD_SIZE = 10
 game_screen = pygame.display.set_mode([1200, 800])
 pygame.display.set_caption("Batalha Naval")
@@ -28,6 +32,8 @@ EXIT_BUTTON = pygame.transform.scale(EXIT_BUTTON, (150, 150))
 RETURNTOTITLE_BUTTON = pygame.image.load("gfx/button_returntotitle.png")
 RETURNTOTITLE_BUTTON = pygame.transform.scale(RETURNTOTITLE_BUTTON, (150, 150))
 
+TITLE_SONG = pygame.mixer.music.load("sfx/sound_track/TITLE_SONG.wav")
+
 # loading and rescaling arrow sprites (for board positioning)
 arrow_up = pygame.image.load("gfx/arrow_up.png").convert_alpha()
 arrow_up = pygame.transform.scale(arrow_up, (75,75))
@@ -47,10 +53,6 @@ ARROW_DIRECTIONS = (arrow_left, arrow_right, arrow_up, arrow_down)
 next_ship_button = pygame.image.load("gfx/button_sprite.png")
 next_ship_button = pygame.transform.scale(next_ship_button, (250, 100))
 next_ship_button_rect = next_ship_button.get_rect(center=(310,620))
-
-# framerate and sfx
-mixer = pygame.mixer.init()
-clock = pygame.time.Clock()
 
 # loading sfx tracks
 sfx_button = pygame.mixer.Sound("sfx/button_select.wav")
@@ -151,11 +153,13 @@ if __name__ == "__main__":
     returntotitle_button_sprite.image = RETURNTOTITLE_BUTTON
     returntotitle_button_sprite.rect = RETURNTOTITLE_BUTTON.get_rect(center=(310,620))
 
+    pygame.mixer.music.play(-1)
     auto_place_ships(game_cpu.board, GAME_SHIPS)
     while running:
+        pygame.mixer.music.set_volume(0.5)
         # main menu will STUCK instead of switch loops
         while start_menu:
-            
+            pygame.mixer.music.set_volume(1.0)
             # title screen
             if not instructions_screen:
                 game_screen.blit(BACKGROUND, (0,0))
