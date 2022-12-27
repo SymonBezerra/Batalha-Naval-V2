@@ -193,6 +193,8 @@ if __name__ == "__main__":
                         instructions_screen = False
             pygame.display.flip()
         
+        # here starts the game loop
+        
         # if not duplicated, the rotation arrow
         # will not update its image
         game_screen.blit(BACKGROUND, (0,0))
