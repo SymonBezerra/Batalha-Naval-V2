@@ -235,7 +235,7 @@ if __name__ == "__main__":
                     rotation_arrow.image = ARROW_DIRECTIONS[game_player.board.rotation]
         
         if cpu_turn and game_on:
-            if game_tick != 0:
+            if game_tick < 5:
                 pygame.time.delay(1000)
                 cpu_aim = game_cpu.randomshot()
                 cpu_target: Ship = game_player.board.fleet_objects[cpu_aim[0]][cpu_aim[1]]
