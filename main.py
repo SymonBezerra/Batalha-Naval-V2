@@ -25,6 +25,9 @@ HOWTO_BUTTON = pygame.transform.scale(HOWTO_BUTTON, (150, 150))
 EXIT_BUTTON = pygame.image.load("gfx/button_exit.png")
 EXIT_BUTTON = pygame.transform.scale(EXIT_BUTTON, (150, 150))
 
+RETURNTOTITLE_BUTTON = pygame.image.load("gfx/button_returntotitle.png")
+RETURNTOTITLE_BUTTON = pygame.transform.scale(RETURNTOTITLE_BUTTON, (150, 150))
+
 # loading and rescaling arrow sprites (for board positioning)
 arrow_up = pygame.image.load("gfx/arrow_up.png").convert_alpha()
 arrow_up = pygame.transform.scale(arrow_up, (75,75))
@@ -145,6 +148,8 @@ if __name__ == "__main__":
     exit_button_sprite.rect = EXIT_BUTTON.get_rect(center=(600,650))
 
     returntotitle_button_sprite = pygame.sprite.Sprite()
+    returntotitle_button_sprite.image = RETURNTOTITLE_BUTTON
+    returntotitle_button_sprite.rect = RETURNTOTITLE_BUTTON.get_rect(center=(310,620))
 
     auto_place_ships(game_cpu.board, GAME_SHIPS)
     while running:
@@ -195,7 +200,7 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-            elif event.type == MOUSEBUTTONDOWN and game_on:
+            elif event.type == MOUSEBUTTONDOWN and game_on and player_turn:
                 pos = pygame.mouse.get_pos()
                 ship_entity: Ship
                 for ship_entity in [entity for entity
@@ -223,6 +228,11 @@ if __name__ == "__main__":
                                 ship_entity.coordinate, game_player.board.rotation)
                     if valid_place: next_ship += 1
                     if next_ship == 6: placing_ships, game_on = False, True
+            
+            elif event.type == MOUSEBUTTONDOWN and not game_on:
+                pos = pygame.mouse.get_pos()
+                if returntotitle_button_sprite.rect.collidepoint(pos):
+                    start_menu = True
         
         if cpu_turn and game_on:
             if game_tick != 0:
@@ -275,6 +285,11 @@ if __name__ == "__main__":
             game_on = False
             player_display = "CPU wins the game!"
             cpu_display = "Better luck next time =("
+        
+        # display return to title button
+        if game_on == False:
+            game_screen.blit(returntotitle_button_sprite.image,
+            returntotitle_button_sprite.rect)
         pygame.display.flip()
         clock.tick(20)
     
