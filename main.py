@@ -235,7 +235,7 @@ if __name__ == "__main__":
                     rotation_arrow.image = ARROW_DIRECTIONS[game_player.board.rotation]
         
         if cpu_turn and game_on:
-            if game_tick < 5:
+            if game_tick != 0:
                 pygame.time.delay(1000)
                 cpu_aim = game_cpu.randomshot()
                 cpu_target: Ship = game_player.board.fleet_objects[cpu_aim[0]][cpu_aim[1]]
@@ -251,16 +251,28 @@ if __name__ == "__main__":
                 game_tick += 1
             
 
+        # displaying the boards 
         board_blit(game_player.board, game_screen)
+        board_blit(game_cpu.board, game_screen)
 
         # text display above the board
-        player_display = game_player.board.stats
-        cpu_display = game_cpu.board.stats
+        if game_cpu.lives == 0:
+            game_on = False
+            player_display = "Player wins the game =D"
+            cpu_display = "You're the Sea Master!"
+        else:
+            player_display = game_player.board.stats
+        
+        if game_player.lives == 0:
+            game_on = False
+            player_display = "CPU wins the game!"
+            cpu_display = "Better luck next time =("
+        else:
+            cpu_display = game_cpu.board.stats
         
         player_stats = GAME_FONT.render(player_display, True, (0,0,0))
         game_screen.blit(player_stats, (game_player.board.init_pos[0] - 20,
                                         game_player.board.init_pos[1] - 100))
-        board_blit(game_cpu.board, game_screen)
 
         cpu_stats = GAME_FONT.render(cpu_display, True, (0,0,0))
         game_screen.blit(cpu_stats, (game_cpu.board.init_pos[0] - 20,
@@ -272,19 +284,9 @@ if __name__ == "__main__":
                             True, (0,0,0)), (200, 600))
             game_screen.blit(rotation_arrow.image,
             rotation_arrow.image.get_rect(center=(475,620)))
-
-        if game_cpu.lives == 0:
-            game_on = False
-            player_display = "Player wins the game =D"
-            cpu_display = "You're the Sea Master!"
-        
-        if game_player.lives == 0:
-            game_on = False
-            player_display = "CPU wins the game!"
-            cpu_display = "Better luck next time =("
         
         # display return to title button
-        if game_on == False:
+        if game_on == False and (game_player.lives == 0 or game_cpu.lives == 0):
             game_screen.blit(returntotitle_button_sprite.image,
             returntotitle_button_sprite.rect)
         pygame.display.flip()
