@@ -14,6 +14,7 @@ BACKGROUND = pygame.transform.scale(BACKGROUND, (1200, 800))
 COL_COORDS = pygame.image.load("gfx/col_coords.png").convert_alpha()
 LINE_COORDS = pygame.image.load("gfx/line_coords.png").convert_alpha()
 GAME_TITLE =  pygame.image.load("gfx/game_title.png").convert_alpha()
+INSTRUCTIONS_TEXT = pygame.image.load("gfx/instructions_text.png").convert_alpha()
 
 START_BUTTON = pygame.image.load("gfx/button_start.png")
 START_BUTTON = pygame.transform.scale(START_BUTTON, (150, 150))
@@ -121,7 +122,7 @@ if __name__ == "__main__":
 
     running = True
     start_menu = True
-    instructions = False
+    instructions_screen = False
     game_on = False
     player_turn, cpu_turn = True, False # alternated = sea battle!
     placing_ships = True
@@ -135,9 +136,15 @@ if __name__ == "__main__":
     start_button_sprite.image = START_BUTTON
     start_button_sprite.rect = START_BUTTON.get_rect(center=(600,450))
 
+    instructions_button_sprite = pygame.sprite.Sprite()
+    instructions_button_sprite.image = HOWTO_BUTTON
+    instructions_button_sprite.rect = HOWTO_BUTTON.get_rect(center=(600,550))
+
     exit_button_sprite = pygame.sprite.Sprite()
     exit_button_sprite.image = EXIT_BUTTON
     exit_button_sprite.rect = EXIT_BUTTON.get_rect(center=(600,650))
+
+    returntotitle_button_sprite = pygame.sprite.Sprite()
 
     auto_place_ships(game_cpu.board, GAME_SHIPS)
     while running:
@@ -145,7 +152,7 @@ if __name__ == "__main__":
         while start_menu:
             
             # title screen
-            if not instructions:
+            if not instructions_screen:
                 game_screen.blit(BACKGROUND, (0,0))
                 # game title
                 game_screen.blit(GAME_TITLE, GAME_TITLE.get_rect(center=(600,250)))
@@ -154,25 +161,31 @@ if __name__ == "__main__":
                 game_screen.blit(start_button_sprite.image, 
                 start_button_sprite.rect)
 
-                game_screen.blit(HOWTO_BUTTON, HOWTO_BUTTON.get_rect(center=(600,550)))
+                game_screen.blit(instructions_button_sprite.image, 
+                instructions_button_sprite.rect)
 
                 game_screen.blit(exit_button_sprite.image, exit_button_sprite.rect)
 
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        pygame.quit()
-                    elif event.type == MOUSEBUTTONDOWN:
-                        mouse_pos = pygame.mouse.get_pos()
-                        if start_button_sprite.rect.collidepoint(mouse_pos):
-                            start_menu = False
-                            pygame.mixer.Sound.play(sfx_button)
-                        elif exit_button_sprite.rect.collidepoint(mouse_pos):
-                            start_menu = False
-                            running = False
-
             # game instructions
             else:
-                pass
+                game_screen.blit(BACKGROUND, (0,0))
+                game_screen.blit(INSTRUCTIONS_TEXT, (0,0))
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                elif event.type == MOUSEBUTTONDOWN:
+                    mouse_pos = pygame.mouse.get_pos()
+                    if not instructions_screen and start_button_sprite.rect.collidepoint(mouse_pos):
+                        start_menu = False
+                        pygame.mixer.Sound.play(sfx_button)
+                    elif not instructions_screen and instructions_button_sprite.rect.collidepoint(mouse_pos):
+                        instructions_screen = True
+                    elif not instructions_screen and exit_button_sprite.rect.collidepoint(mouse_pos):
+                        start_menu = False
+                        running = False
+                    elif instructions_screen:
+                        instructions_screen = False
             pygame.display.flip()
         
         # if not duplicated, the rotation arrow
@@ -229,13 +242,17 @@ if __name__ == "__main__":
             
 
         board_blit(game_player.board, game_screen)
+
+        # text display above the board
+        player_display = game_player.board.stats
+        cpu_display = game_cpu.board.stats
         
-        player_stats = GAME_FONT.render(game_player.board.stats, True, (0,0,0))
+        player_stats = GAME_FONT.render(player_display, True, (0,0,0))
         game_screen.blit(player_stats, (game_player.board.init_pos[0] - 20,
                                         game_player.board.init_pos[1] - 100))
         board_blit(game_cpu.board, game_screen)
 
-        cpu_stats = GAME_FONT.render(game_cpu.board.stats, True, (0,0,0))
+        cpu_stats = GAME_FONT.render(cpu_display, True, (0,0,0))
         game_screen.blit(cpu_stats, (game_cpu.board.init_pos[0] - 20,
                                         game_cpu.board.init_pos[1] - 100))
 
@@ -251,9 +268,13 @@ if __name__ == "__main__":
 
         if game_cpu.lives == 0:
             game_on = False
-            game_cpu.board.stats = "CPU wins the Sea Battle!"
-            game_player.board.stats = "Better luck next time! =("
+            player_display = "Player wins the game =D"
+            cpu_display = "You're the Sea Master!"
         
+        if game_player.lives == 0:
+            game_on = False
+            player_display = "CPU wins the game!"
+            cpu_display = "Better luck next time =("
         pygame.display.flip()
         clock.tick(20)
     
