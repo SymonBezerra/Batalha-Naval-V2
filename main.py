@@ -121,6 +121,7 @@ if __name__ == "__main__":
 
     running = True
     start_menu = True
+    instructions = False
     game_on = False
     player_turn, cpu_turn = True, False # alternated = sea battle!
     placing_ships = True
@@ -142,28 +143,36 @@ if __name__ == "__main__":
     while running:
         # main menu will STUCK instead of switch loops
         while start_menu:
-            game_screen.blit(BACKGROUND, (0,0))
-            # game title
-            game_screen.blit(GAME_TITLE, GAME_TITLE.get_rect(center=(600,250)))
+            
+            # title screen
+            if not instructions:
+                game_screen.blit(BACKGROUND, (0,0))
+                # game title
+                game_screen.blit(GAME_TITLE, GAME_TITLE.get_rect(center=(600,250)))
 
-            # buttons
-            game_screen.blit(start_button_sprite.image, 
-            start_button_sprite.rect)
+                # buttons
+                game_screen.blit(start_button_sprite.image, 
+                start_button_sprite.rect)
 
-            game_screen.blit(HOWTO_BUTTON, HOWTO_BUTTON.get_rect(center=(600,550)))
+                game_screen.blit(HOWTO_BUTTON, HOWTO_BUTTON.get_rect(center=(600,550)))
 
-            game_screen.blit(exit_button_sprite.image, exit_button_sprite.rect)
+                game_screen.blit(exit_button_sprite.image, exit_button_sprite.rect)
 
-            for event in pygame.event.get():
-                if event == pygame.quit:
-                    pygame.quit()
-                elif event.type == MOUSEBUTTONDOWN:
-                    mouse_pos = pygame.mouse.get_pos()
-                    if start_button_sprite.rect.collidepoint(mouse_pos):
-                        start_menu = False
-                        pygame.mixer.Sound.play(sfx_button)
-                    elif exit_button_sprite.rect.collidepoint(mouse_pos):
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
                         pygame.quit()
+                    elif event.type == MOUSEBUTTONDOWN:
+                        mouse_pos = pygame.mouse.get_pos()
+                        if start_button_sprite.rect.collidepoint(mouse_pos):
+                            start_menu = False
+                            pygame.mixer.Sound.play(sfx_button)
+                        elif exit_button_sprite.rect.collidepoint(mouse_pos):
+                            start_menu = False
+                            running = False
+
+            # game instructions
+            else:
+                pass
             pygame.display.flip()
         
         # if not duplicated, the rotation arrow
@@ -230,9 +239,6 @@ if __name__ == "__main__":
         game_screen.blit(cpu_stats, (game_cpu.board.init_pos[0] - 20,
                                         game_cpu.board.init_pos[1] - 100))
 
-        # board_rotation = GAME_FONT.render(str(game_player.board.rotation), True, (0,0,0))
-        # game_screen.blit(board_rotation, (540, 500))
-
         if placing_ships:
             game_screen.blit(next_ship_button, next_ship_button_rect)
             game_screen.blit(GAME_FONT.render(f"Next ship is: {GAME_SHIPS[next_ship]}",
@@ -240,8 +246,13 @@ if __name__ == "__main__":
             game_screen.blit(rotation_arrow.image,
             rotation_arrow.image.get_rect(center=(475,620)))
 
-        if game_cpu.lives == 0 or game_player.lives == 0:
-            game_on = False # game loop can be stopped
+        # if game_cpu.lives == 0 or game_player.lives == 0:
+        #     game_on = False # game loop can be stopped
+
+        if game_cpu.lives == 0:
+            game_on = False
+            game_cpu.board.stats = "CPU wins the Sea Battle!"
+            game_player.board.stats = "Better luck next time! =("
         
         pygame.display.flip()
         clock.tick(20)
