@@ -194,7 +194,7 @@ if __name__ == "__main__":
             pygame.display.flip()
         
         # here starts the game loop
-        
+
         # if not duplicated, the rotation arrow
         # will not update its image
         game_screen.blit(BACKGROUND, (0,0))
@@ -202,39 +202,37 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-            elif event.type == MOUSEBUTTONDOWN and game_on and player_turn:
+            elif event.type == MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
-                ship_entity: Ship
-                for ship_entity in [entity for entity
-                                    in game_cpu.board.fleet_sprites
-                                    if entity.rect.collidepoint(pos)]:
-                        ship_entity.set_hit()
-                        game_player.board.last_hit_coord = ship_entity.coordinate
-                        game_player.board.last_hit_tag = ship_entity.tag
-                        if ship_entity.tag in ("N", "O"):
-                            player_turn, cpu_turn = False, True
-                        else:
-                            game_cpu.lives -= 1
+                if game_on and player_turn:
+                    ship_entity: Ship
+                    for ship_entity in [entity for entity
+                                        in game_cpu.board.fleet_sprites
+                                        if entity.rect.collidepoint(pos)]:
+                            ship_entity.set_hit()
+                            game_player.board.last_hit_coord = ship_entity.coordinate
+                            game_player.board.last_hit_tag = ship_entity.tag
+                            if ship_entity.tag in ("N", "O"):
+                                player_turn, cpu_turn = False, True
+                            else:
+                                game_cpu.lives -= 1
+                elif placing_ships:
+                    for ship_entity in [entity for entity
+                                        in game_player.board.fleet_sprites
+                                        if entity.rect.collidepoint(pos)]:
+                        valid_place = place_ship(game_player.board, GAME_SHIPS[next_ship], 
+                                    ship_entity.coordinate, game_player.board.rotation)
+                        if valid_place: next_ship += 1
+                        if next_ship == 6: placing_ships, game_on = False, True
+                
+                elif not game_on:
+                    if returntotitle_button_sprite.rect.collidepoint(pos):
+                        start_menu = True
             
             elif event.type == KEYDOWN and placing_ships:
                 if event.key == K_SPACE:
                     game_player.board.rotate()
                     rotation_arrow.image = ARROW_DIRECTIONS[game_player.board.rotation]
-            
-            elif event.type == MOUSEBUTTONDOWN and placing_ships:
-                pos = pygame.mouse.get_pos()
-                for ship_entity in [entity for entity
-                                    in game_player.board.fleet_sprites
-                                    if entity.rect.collidepoint(pos)]:
-                    valid_place = place_ship(game_player.board, GAME_SHIPS[next_ship], 
-                                ship_entity.coordinate, game_player.board.rotation)
-                    if valid_place: next_ship += 1
-                    if next_ship == 6: placing_ships, game_on = False, True
-            
-            elif event.type == MOUSEBUTTONDOWN and not game_on:
-                pos = pygame.mouse.get_pos()
-                if returntotitle_button_sprite.rect.collidepoint(pos):
-                    start_menu = True
         
         if cpu_turn and game_on:
             if game_tick != 0:
