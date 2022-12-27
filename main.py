@@ -273,9 +273,6 @@ if __name__ == "__main__":
             game_screen.blit(rotation_arrow.image,
             rotation_arrow.image.get_rect(center=(475,620)))
 
-        # if game_cpu.lives == 0 or game_player.lives == 0:
-        #     game_on = False # game loop can be stopped
-
         if game_cpu.lives == 0:
             game_on = False
             player_display = "Player wins the game =D"
