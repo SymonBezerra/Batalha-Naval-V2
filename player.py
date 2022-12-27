@@ -20,6 +20,6 @@ class Player:
             self.board.fleet_objects.append(fleet_objects)
 
     def reset_board (self):
-        self.board.fleet_sprites = pygame.sprite.Sprite()
-        self.board.fleet_objects = []
+        self.board.fleet_sprites.empty()
+        self.board.fleet_objects.clear()
         self.__initialize_game()
