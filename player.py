@@ -1,5 +1,6 @@
 from board import Board
 from ship import Ship
+import pygame
 class Player:
     def __init__ (self, size: int, name: str):
         self.name = name
@@ -17,3 +18,8 @@ class Player:
                 self.board.fleet_sprites.add(ship)
 
             self.board.fleet_objects.append(fleet_objects)
+
+    def reset_board (self):
+        self.board.fleet_sprites = pygame.sprite.Sprite()
+        self.board.fleet_objects = []
+        self.__initialize_game()
