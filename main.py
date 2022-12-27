@@ -50,7 +50,6 @@ clock = pygame.time.Clock()
 
 # loading sfx tracks
 sfx_button = pygame.mixer.Sound("sfx/button_select.wav")
-
 # game loop functions 
 def board_blit(board: Board, screen: pygame.Surface):
     # for printing the board
@@ -135,6 +134,10 @@ if __name__ == "__main__":
     start_button_sprite.image = START_BUTTON
     start_button_sprite.rect = START_BUTTON.get_rect(center=(600,450))
 
+    exit_button_sprite = pygame.sprite.Sprite()
+    exit_button_sprite.image = EXIT_BUTTON
+    exit_button_sprite.rect = EXIT_BUTTON.get_rect(center=(600,650))
+
     auto_place_ships(game_cpu.board, GAME_SHIPS)
     while running:
         # main menu will STUCK instead of switch loops
@@ -149,7 +152,7 @@ if __name__ == "__main__":
 
             game_screen.blit(HOWTO_BUTTON, HOWTO_BUTTON.get_rect(center=(600,550)))
 
-            game_screen.blit(EXIT_BUTTON, EXIT_BUTTON.get_rect(center=(600,650)))
+            game_screen.blit(exit_button_sprite.image, exit_button_sprite.rect)
 
             for event in pygame.event.get():
                 if event == pygame.quit:
@@ -159,6 +162,8 @@ if __name__ == "__main__":
                     if start_button_sprite.rect.collidepoint(mouse_pos):
                         start_menu = False
                         pygame.mixer.Sound.play(sfx_button)
+                    elif exit_button_sprite.rect.collidepoint(mouse_pos):
+                        pygame.quit()
             pygame.display.flip()
         
         # if not duplicated, the rotation arrow
