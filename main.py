@@ -230,6 +230,9 @@ if __name__ == "__main__":
                         start_menu = True
                         game_player.reset_board()
                         game_cpu.reset_board()
+                        player_turn, cpu_turn = True, False
+                        placing_ships = True
+
             
             elif event.type == KEYDOWN and placing_ships:
                 if event.key == K_SPACE:
