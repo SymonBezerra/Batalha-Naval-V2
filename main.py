@@ -43,8 +43,13 @@ ARROW_DIRECTIONS = (arrow_left, arrow_right, arrow_up, arrow_down)
 next_ship_button = pygame.image.load("gfx/button_sprite.png")
 next_ship_button = pygame.transform.scale(next_ship_button, (250, 100))
 next_ship_button_rect = next_ship_button.get_rect(center=(310,620))
-# not used for this version
+
+# framerate and sfx
+mixer = pygame.mixer.init()
 clock = pygame.time.Clock()
+
+# loading sfx tracks
+sfx_button = pygame.mixer.Sound("sfx/button_select.wav")
 
 # game loop functions 
 def board_blit(board: Board, screen: pygame.Surface):
@@ -153,6 +158,7 @@ if __name__ == "__main__":
                     mouse_pos = pygame.mouse.get_pos()
                     if start_button_sprite.rect.collidepoint(mouse_pos):
                         start_menu = False
+                        pygame.mixer.Sound.play(sfx_button)
             pygame.display.flip()
         
         # if not duplicated, the rotation arrow
