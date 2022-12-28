@@ -196,7 +196,7 @@ if __name__ == "__main__":
                             pass
                         else:
                             cblock.show_collision_block = True
-                            cblock.set_hit()
+                            cblock.update_sprite()
                 game_on = True
             
             player_destroyed_ships = game_player.board.check_destroyed_ships()
@@ -209,7 +209,7 @@ if __name__ == "__main__":
                             pass
                         else:
                             cblock.show_collision_block = True
-                            cblock.set_hit()
+                            cblock.update_sprite()
                 game_on = True
 
             for event in pygame.event.get():
