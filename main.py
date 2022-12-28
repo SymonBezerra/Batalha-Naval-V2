@@ -184,6 +184,8 @@ if __name__ == "__main__":
                 game_screen.blit(BACKGROUND, (0,0))
                 game_screen.blit(INSTRUCTIONS_TEXT, (0,0))
 
+            # revealing collision blocks
+
             cpu_destroyed_ships = game_cpu.board.check_destroyed_ships()
             if cpu_destroyed_ships[0]:
                 cblock: Ship
