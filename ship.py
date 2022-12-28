@@ -26,11 +26,11 @@ class Ship(pygame.sprite.Sprite):
     def update_sprite (self) -> pygame.image:
         if not self.hit and self.player_name == "Player" and self.tag not in ("N", "O"):
             self.image = pygame.image.load("gfx/playership_square2.png").convert()
+        if self.hit and self.tag in ("N", "O"):
+            self.image = pygame.image.load("gfx/miss_square.png").convert()
+        if self.hit and self.tag in ("R", "C", "B", "D"):
+            self.image = pygame.image.load("gfx/hit_square.png").convert()
         elif self.show_collision_block and self.tag == "O":
             self.image = pygame.image.load("gfx/collision_block_square.png").convert()
-        elif self.hit and self.tag in ("N", "O"):
-            self.image = pygame.image.load("gfx/miss_square.png").convert()
-        elif self.hit and self.tag in ("R", "C", "B", "D"):
-            self.image = pygame.image.load("gfx/hit_square.png").convert()
         
         self.image = pygame.transform.scale(self.image, (35, 35))

@@ -35,13 +35,13 @@ class Board:
         # ship[0] = ship coordinates; ship[1] = collision blocks' coordinates;
         for ship in self.fleet_ships:
             ship_tags = []
-            for cell in ship[0]:
+            for cell in ship:
                 ship_object: Ship = self.fleet_objects[cell[0]][cell[1]]
-                ship_tags.append[ship_object.tag]
+                ship_tags.append(ship_object.tag)
             if ship_tags.count("H") == len(ship_tags):
-                return (True, ship[1])
+                return (True, self.fleet_ships.pop(self.fleet_ships.index[ship]))
         
-        return (False, [])
+        return (False, None)
 
     @property
     def stats (self) -> str:
@@ -143,8 +143,8 @@ class Board:
         return coordinates
 
     
-    def check_collision_blocks (self, coordinate, ship_tag: str, 
-                                direction: int, first_ship: bool, 
+    def check_collision_blocks (self, coordinate, direction: int, 
+                                first_ship: bool, 
                                 last_ship: bool) -> list:
     
         cblocks_coordinates = []

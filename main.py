@@ -80,16 +80,16 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
             ship.tag = ship_tag
             ship.update_sprite()
 
-            ship_collision_blocks: list
+            ship_collision_blocks = []
             if coordinate == ship_coordinates[0]:
                 ship_collision_blocks = board.check_collision_blocks(coordinate,
-                ship_tag, direction, True, False)
+                direction, True, False)
             elif coordinate == ship_coordinates[len(ship_coordinates) - 1]:
                 ship_collision_blocks = board.check_collision_blocks(coordinate,
-                ship_tag, direction, False, True)
+                direction, False, True)
             else:
                 ship_collision_blocks = board.check_collision_blocks(coordinate,
-                ship_tag, direction, False, False)
+                direction, False, False)
             
             for collision_block in ship_collision_blocks:
                 ship_cblock: Ship = board.fleet_objects[collision_block[0]][collision_block[1]]
@@ -97,11 +97,11 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
                 # ship_cblock.show_collision_block = True # debug
                 ship_cblock.update_sprite()
         
+            # ship.hit = True # debug
         # now I need a way to store the ship's COORDINATES into a memory
         # + check its collision blocks
-        board.fleet_ships.append((ship_coordinates, ship_collision_blocks))
+        board.fleet_ships.append(ship_coordinates)
 
-            # if manual_input: ship.hit = True # debug
         
         return True
 
@@ -135,6 +135,11 @@ if __name__ == "__main__":
     game_on = False
     player_turn, cpu_turn = True, False # alternated = sea battle!
     placing_ships = True
+
+    # destroyed ships
+    cpu_destroyed_ships = []
+    player_destroyed_ships = []
+    destroyed_ship_frame = 0
 
     # placing_ships arrow sprite
     rotation_arrow = pygame.sprite.Sprite()
@@ -183,35 +188,7 @@ if __name__ == "__main__":
             else:
                 game_screen.blit(BACKGROUND, (0,0))
                 game_screen.blit(INSTRUCTIONS_TEXT, (0,0))
-
-            # revealing collision blocks
-
-            cpu_destroyed_ships = game_cpu.board.check_destroyed_ships()
-            if cpu_destroyed_ships[0]:
-                cblock: Ship
-                game_on = False # stop game loop temporarily
-                for cblock in player_destroyed_ships[1]:
-                    for i in range(5): # skip 5 frames
-                        if i < 4:
-                            pass
-                        else:
-                            cblock.show_collision_block = True
-                            cblock.update_sprite()
-                game_on = True
-            
-            player_destroyed_ships = game_player.board.check_destroyed_ships()
-            if player_destroyed_ships[0]:
-                cblock: Ship
-                game_on = False
-                for cblock in player_destroyed_ships[1]:
-                    for i in range(5): # frame skipper
-                        if i < 4:
-                            pass
-                        else:
-                            cblock.show_collision_block = True
-                            cblock.update_sprite()
-                game_on = True
-
+                
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
