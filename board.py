@@ -36,7 +36,8 @@ class Board:
         for ship in self.fleet_ships:
             ship_tags = []
             for cell in ship[0]:
-                ship_tags.append(self.fleet_objects[cell[0]][cell[1]].tag)
+                ship_object: Ship = self.fleet_objects[cell[0]][cell[1]]
+                ship_tags.append[ship_object.tag]
             if ship_tags.count("H") == len(ship_tags):
                 return (True, ship[1])
         
