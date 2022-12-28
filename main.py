@@ -96,6 +96,10 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
                 ship_cblock.tag = "O" # collision block tag
                 # ship_cblock.show_collision_block = True # debug
                 ship_cblock.update_sprite()
+        
+        # now I need a way to store the ship's COORDINATES into a memory
+        # + check its collision blocks
+        board.fleet_ships.append((ship_coordinates, ship_collision_blocks))
 
             # if manual_input: ship.hit = True # debug
         
@@ -179,6 +183,32 @@ if __name__ == "__main__":
             else:
                 game_screen.blit(BACKGROUND, (0,0))
                 game_screen.blit(INSTRUCTIONS_TEXT, (0,0))
+
+            cpu_destroyed_ships = game_cpu.board.check_destroyed_ships()
+            if cpu_destroyed_ships[0]:
+                cblock: Ship
+                game_on = False # stop game loop temporarily
+                for cblock in player_destroyed_ships[1]:
+                    for i in range(5): # skip 5 frames
+                        if i < 4:
+                            pass
+                        else:
+                            cblock.show_collision_block = True
+                            cblock.set_hit()
+                game_on = True
+            
+            player_destroyed_ships = game_player.board.check_destroyed_ships()
+            if player_destroyed_ships[0]:
+                cblock: Ship
+                game_on = False
+                for cblock in player_destroyed_ships[1]:
+                    for i in range(5): # frame skipper
+                        if i < 4:
+                            pass
+                        else:
+                            cblock.show_collision_block = True
+                            cblock.set_hit()
+                game_on = True
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

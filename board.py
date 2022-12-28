@@ -11,6 +11,7 @@ class Board:
         self.fleet_sprites = pygame.sprite.Group()
         # for drawing
         self.fleet_objects = []
+        self.fleet_ships = []
         # for hits
         self.rotation = 0
 
@@ -28,6 +29,18 @@ class Board:
     #     for i in range(self.size):
     #         for j in range (self.size):
     #             fleet.add(Ship("N", (i,j)))
+
+    def check_destroyed_ships(self) -> tuple: # (bool, list of ship coords)
+        ship: tuple
+        # ship[0] = ship coordinates; ship[1] = collision blocks' coordinates;
+        for ship in self.fleet_ships:
+            ship_tags = []
+            for cell in ship[0]:
+                ship_tags.append(self.fleet_objects[cell[0]][cell[1]].tag)
+            if ship_tags.count("H") == len(ship_tags):
+                return (True, ship[1])
+        
+        return (False, [])
 
     @property
     def stats (self) -> str:
