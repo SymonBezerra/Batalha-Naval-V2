@@ -35,8 +35,8 @@ class Board:
         # ship[0] = ship coordinates; ship[1] = collision blocks' coordinates;
         for ship in self.fleet_ships:
             ship_tags = []
-            for cell in ship:
-                ship_object: Ship = self.fleet_objects[cell[0]][cell[1]]
+            for ship_cell in ship:
+                ship_object: Ship = self.fleet_objects[ship_cell[0]][ship_cell[1]]
                 ship_tags.append(ship_object.tag)
             if ship_tags.count("H") == len(ship_tags):
                 return (True, self.fleet_ships.pop(self.fleet_ships.index[ship]))

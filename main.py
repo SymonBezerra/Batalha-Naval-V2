@@ -75,6 +75,7 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
     valid_placement = board.check_avaliable_placement(init_coordinate, ship_tag, direction)
     if valid_placement:
         ship_coordinates = board.adjacent_coordinates(init_coordinate, ship_tag, direction)
+        ship_cblocks = []
         for coordinate in ship_coordinates:
             ship: Ship = board.fleet_objects[coordinate[0]][coordinate[1]]
             ship.tag = ship_tag
@@ -90,6 +91,8 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
             else:
                 ship_collision_blocks = board.check_collision_blocks(coordinate,
                 direction, False, False)
+
+            ship_cblocks.append(ship_collision_blocks)
             
             for collision_block in ship_collision_blocks:
                 ship_cblock: Ship = board.fleet_objects[collision_block[0]][collision_block[1]]
@@ -101,7 +104,6 @@ def place_ship(board: Board, ship_tag: str, init_coordinate: tuple, direction: i
         # now I need a way to store the ship's COORDINATES into a memory
         # + check its collision blocks
         board.fleet_ships.append(ship_coordinates)
-
         
         return True
 
@@ -114,7 +116,6 @@ def auto_place_ships(board: Board, ships: list) -> None:
                                 (randint(0,8), randint(0,8)), (randint(0,3)))
         if valid_place: ship_in_place += 1
 
-# game objects 
 
 game_player = Player(BOARD_SIZE, "Player")
 game_cpu = CPU(BOARD_SIZE, "CPU")
@@ -267,7 +268,6 @@ if __name__ == "__main__":
                 game_tick = 0
             else:
                 game_tick += 1
-            
 
         # displaying the boards 
         board_blit(game_player.board, game_screen)
